@@ -1,0 +1,29 @@
+{
+  "PF1AR": {
+    "CharacterSheetLabel": "Ficha alternativa de PJ (Reworked)",
+    "NPCSheetLabel": "Ficha alternativa de NPC (Reworked)",
+    "ModuleTitle": "PF1E Alt Sheet Reworked",
+    "SheetNavigation": "Navegação da ficha de personagem",
+    "Sections": {
+      "Abilities": "Valores de habilidade",
+      "SavingThrows": "Testes de resistência",
+      "CombatStats": "Estatísticas de combate",
+      "Conditions": "Condições",
+      "TraitsAttributes": "Traços e Atributos"
+    },
+    "Labels": {
+      "Ranked": "com graduação",
+      "SelectRace": "Selecione ou crie uma raça",
+      "Attribute": "Atributo",
+      "ToggleTheme": "Alternar modo escuro"
+    },
+    "Abbr": {
+      "Damage": "DANO",
+      "Penalty": "PEN",
+      "Drain": "DREN"
+    },
+    "Settings": {
+      "DarkMode": "Modo escuro"
+    }
+  }
+}

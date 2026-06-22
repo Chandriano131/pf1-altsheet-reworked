@@ -1,0 +1,29 @@
+{
+  "PF1AR": {
+    "CharacterSheetLabel": "Alt PC Sheet (Reworked)",
+    "NPCSheetLabel": "Alt NPC Sheet (Reworked)",
+    "ModuleTitle": "PF1E Alt Sheet Reworked",
+    "SheetNavigation": "Character sheet navigation",
+    "Sections": {
+      "Abilities": "Ability Scores",
+      "SavingThrows": "Saving Throws",
+      "CombatStats": "Combat Statistics",
+      "Conditions": "Conditions",
+      "TraitsAttributes": "Traits & Attributes"
+    },
+    "Labels": {
+      "Ranked": "ranked",
+      "SelectRace": "Select or create a race",
+      "Attribute": "Attribute",
+      "ToggleTheme": "Toggle dark mode"
+    },
+    "Abbr": {
+      "Damage": "DMG",
+      "Penalty": "PEN",
+      "Drain": "DRN"
+    },
+    "Settings": {
+      "DarkMode": "Dark mode"
+    }
+  }
+}

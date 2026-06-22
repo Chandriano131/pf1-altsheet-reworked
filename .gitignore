@@ -1,0 +1,8 @@
+_pf1eSystem/
+_baseModule/
+_design/
+node_modules/
+*.zip
+CLAUDE.md
+AGENTS.md
+.claude/

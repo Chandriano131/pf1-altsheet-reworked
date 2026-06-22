@@ -1,0 +1,154 @@
+{{!-- ABA: Inventory --}}
+<div class="pf1ar-tab-content pf1ar-inventory">
+
+  {{!-- Moeda --}}
+  <h3 class="pf1ar-panel-title"><i class="fa-solid fa-coins" inert></i><span>{{localize "PF1.Currency.Label"}}</span></h3>
+  <div class="pf1ar-currency-section">
+    <div class="pf1ar-currency-row">
+      <h4 class="pf1ar-currency-title">{{localize "PF1.Currency.Label"}}</h4>
+      {{#each system.currency as |v k|}}
+        <div class="pf1ar-currency">
+          <label class="pf1ar-currency-label">{{lookup @root.config.currencies k}}</label>
+          <span class="text-box direct allow-relative" name="system.currency.{{k}}">{{v}}</span>
+        </div>
+      {{/each}}
+    </div>
+    {{#if isCharacter}}
+    <div class="pf1ar-currency-row">
+      <h4 class="pf1ar-currency-title">{{localize "PF1.Currency.Weightless"}}</h4>
+      {{#each system.altCurrency as |v k|}}
+        <div class="pf1ar-currency">
+          <label class="pf1ar-currency-label">{{lookup @root.config.currencies k}}</label>
+          <span class="text-box direct allow-relative" name="system.altCurrency.{{k}}">{{v}}</span>
+        </div>
+      {{/each}}
+    </div>
+    {{/if}}
+  </div>
+
+  {{!-- Filtro de inventário --}}
+  <h3 class="pf1ar-panel-title pf1ar-title-spaced"><i class="fa-solid fa-box-open" inert></i><span>{{localize "PF1.Inventory"}}</span></h3>
+  {{> "systems/pf1/templates/actors/parts/actor-item-nav-filters.hbs" category="inventory" sections=inventory}}
+
+  {{!-- Lista de itens --}}
+  <section class="inventory-body">
+  {{#each inventory as |section sid|}}
+  {{#unless section._hidden}}
+    <ol class="item-list" data-list="{{section.id}}" data-type="{{section.create.type}}" data-subtype="{{section.create.system.subType}}">
+      <li class="item-list-header flexrow pf1ar-item-list-header">
+        <div class="item-name"><h3>{{pf1ar_localize section.label}}</h3></div>
+        {{#if section.interface.actions}}<div class="item-detail item-actions"><i class="icon-pf icon-gears" data-tooltip="PF1.ActionPlural"></i></div>{{/if}}
+        {{#if section.interface.value}}<div class="item-detail item-value"><i class="icon-pf icon-coins" data-tooltip="PF1.Value"></i></div>{{/if}}
+        <div class="item-detail item-weight"><i class="icon-pf icon-weight" data-tooltip="PF1.ItemWeight"></i></div>
+        <div class="item-detail item-carried"><i class="icon-pf icon-wheelbarrow" data-tooltip="PF1.Carried"></i></div>
+        {{#if section.interface.equip}}<div class="item-detail item-equipped"><i class="icon-pf icon-battle-gear" data-tooltip="PF1.Equipped"></i></div>{{/if}}
+        <div class="item-detail item-uses"><i class="icon-pf icon-battery-pack" data-tooltip="PF1.ChargePlural"></i></div>
+        {{#if @root.owner}}
+        <div class="item-controls">
+          {{#if section.interface.create}}
+          <a class="item-control item-create" data-tooltip="PF1.CreateItem" data-create="{{section.path}}">
+            <i class="fa-solid fa-plus" inert></i>
+          </a>
+          {{/if}}
+          <a data-action="browse" data-source="{{section.path}}" data-tooltip="PF1.BrowseItems">
+            <i class="fa-solid fa-folder-plus" inert></i>
+          </a>
+        </div>
+        {{/if}}
+      </li>
+
+      {{#each section.items as |item iid|}}
+      <li class="item flexrow pf1ar-item-row" data-item-id="{{item.id}}">
+        <div class="item-name rollable">
+          <div class="item-image" style='background-image: url("{{item.img}}")' data-tooltip="PF1.DisplayInChat"></div>
+          <h4>{{item.name}}</h4>
+        </div>
+        {{#if section.interface.actions}}
+        <div class="item-detail item-actions">
+          {{#if item.hasAction}}
+          <a class="item-control item-action action roll" data-tooltip="PF1.UseItem">
+            <i class="fa-solid fa-dice-d20" inert></i>
+          </a>
+          {{/if}}
+        </div>
+        {{/if}}
+        {{#if section.interface.value}}
+        <div class="item-detail item-value">
+          <span>{{item.labels.price}}</span>
+        </div>
+        {{/if}}
+        <div class="item-detail item-weight">
+          <span>{{#if item.system.weight.total}}{{item.system.weight.total}}{{/if}}</span>
+        </div>
+        <div class="item-detail item-carried">
+          <input type="checkbox" {{#if item.system.carried}}checked{{/if}} name="carried">
+        </div>
+        {{#if section.interface.equip}}
+        <div class="item-detail item-equipped">
+          <input type="checkbox" {{#if item.system.equipped}}checked{{/if}} name="equipped">
+        </div>
+        {{/if}}
+        <div class="item-detail item-uses flexrow" data-tooltip-extended="item.{{item.id}}.resources">
+          {{#if item.isCharged}}
+          <span class="text-box value allow-relative" data-wheel-step="1" data-dtype="Number">{{item.uses.value}}</span>
+            {{#unless item.noMaxCharges}}
+            <span class="sep"> / </span>
+            <span class="max">{{item.uses.max}}</span>
+            {{/unless}}
+          {{/if}}
+        </div>
+        {{#if @root.owner}}
+        <div class="item-controls">
+          <a class="item-control item-edit" data-tooltip="PF1.EditItem"><i class="fa-solid fa-edit" inert></i></a>
+          <a class="item-control item-delete" data-tooltip="PF1.DeleteItem"><i class="fa-solid fa-trash" inert></i></a>
+        </div>
+        {{/if}}
+      </li>
+      {{/each}}
+    </ol>
+  {{/unless}}
+  {{/each}}
+  </section>
+
+  {{#unless isLootSheet}}
+    <footer class="pf1ar-carry-footer" data-tooltip-extended="carryCapacity" data-tooltip-direction="UP">
+      <h3 class="pf1ar-panel-title"><i class="fa-solid fa-weight-hanging" inert></i><span>{{localize "PF1.Encumbrance"}}</span></h3>
+      <div class="pf1ar-carry-bonus">
+        <label>
+          <span>{{localize "PF1.BonusCarryStrength"}}</span>
+          <input name="system.details.carryCapacity.bonus.user" value="{{system.details.carryCapacity.bonus.user}}" type="number" placeholder="0" step="1">
+        </label>
+        <label>
+          <span>{{localize "PF1.BonusCarryMultiplier"}}</span>
+          <input name="system.details.carryCapacity.multiplier.user" value="{{system.details.carryCapacity.multiplier.user}}" type="number" placeholder="0">
+        </label>
+      </div>
+      {{#with encumbrance}}
+        <div class="pf1ar-carry-summary">
+          <span class="tag">{{carryLabel}}</span>
+          <span class="tag">{{@root.labels.totalValue}}</span>
+        </div>
+        <div class="pf1ar-carry-capacity">
+          <div class="pf1ar-load-meter {{#if encumbered.light}}encumbered{{/if}}">
+            {{#if pct.light}}<span class="pf1ar-load-fill" style="width:{{pct.light}}%"></span>{{/if}}
+            <span class="pf1ar-load-label">{{localize "PF1.CarryLightLoad"}} <b>{{light}}</b></span>
+          </div>
+          <div class="pf1ar-load-meter {{#if encumbered.medium}}encumbered{{/if}}">
+            {{#if pct.medium}}<span class="pf1ar-load-fill" style="width:{{pct.medium}}%"></span>{{/if}}
+            <span class="pf1ar-load-label">{{localize "PF1.CarryMediumLoad"}} <b>{{medium}}</b></span>
+          </div>
+          <div class="pf1ar-load-meter {{#if encumbered.heavy}}encumbered{{/if}}">
+            {{#if pct.heavy}}<span class="pf1ar-load-fill" style="width:{{pct.heavy}}%"></span>{{/if}}
+            <span class="pf1ar-load-label">{{localize "PF1.CarryHeavyLoad"}} <b>{{heavy}}</b></span>
+          </div>
+        </div>
+        <div class="pf1ar-lift-grid">
+          <div class="pf1ar-lift-card"><span>{{localize "PF1.CarryAboveHead"}}</span><strong>{{aboveHead}}</strong></div>
+          <div class="pf1ar-lift-card"><span>{{localize "PF1.CarryOffGround"}}</span><strong>{{offGround}}</strong></div>
+          <div class="pf1ar-lift-card"><span>{{localize "PF1.CarryDragPush"}}</span><strong>{{dragPush}}</strong></div>
+        </div>
+      {{/with}}
+    </footer>
+  {{/unless}}
+
+</div>

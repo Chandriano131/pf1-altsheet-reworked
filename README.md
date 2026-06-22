@@ -8,7 +8,7 @@ This module is a modernization and recreation of the original **PF1 Alt Sheet** 
 
 The **Pathfinder 1e for Foundry VTT** system was also used as a reference for compatibility, data structure, and integration with Foundry VTT v13.
 
-> **AI Disclosure:** This module was developed with assistance from AI tools — including **Claude (Anthropic)** and **OpenAI Codex** — for code generation, refactoring, visual review and documentation support. Authorship, review and final responsibility belong to the maintainers of this repository.
+> **AI Disclosure:** This module was developed with assistance from AI tools — including **Claude (Anthropic)** and **OpenAI Codex** — for code generation, refactoring, visual review and documentation support. Authorship, review and final responsibility belong to the maintainers of this repository, Anthropic and OpenAI.
 
 ## Status
 

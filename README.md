@@ -51,10 +51,6 @@ Planned:
 | Foundry VTT | v13 |
 | PF1E System | v11.11 |
 
-## Development Reference Folders
-
-The folders `_pf1eSystem/`, `_baseModule/`, and `_design/` are exclusive to the development environment. **They are not part of the final package** and are listed in `.gitignore`.
-
 ## Credits and Attributions
 
 This module was developed as a modernization and recreation of the original **PF1 Alt Sheet** module, using it as technical and conceptual reference.

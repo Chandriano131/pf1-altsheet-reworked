@@ -15,6 +15,10 @@
       "Ranked": "ranked",
       "SelectRace": "Select or create a race",
       "Attribute": "Attribute",
+      "Rank": "Rank",
+      "ModifierAbbr": "Mod.",
+      "Roll": "Roll",
+      "Actions": "Actions",
       "ToggleTheme": "Toggle dark mode"
     },
     "Abbr": {

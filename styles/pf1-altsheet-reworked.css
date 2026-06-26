@@ -1785,9 +1785,20 @@
 .pf1ar-root .item-list-header,
 .pf1ar-root .item-list > .item {
   display: flex;
-  flex-flow: row nowrap;
   align-items: stretch;
   width: 100%;
+}
+
+.pf1ar-root .item-list-header {
+  flex-flow: row nowrap;
+}
+
+.pf1ar-root .item-list > .item {
+  flex-flow: row nowrap;
+}
+
+.pf1ar-root .item-list > .item:has(> :is(.item-summary, .action-summary)) {
+  flex-flow: row wrap;
 }
 
 .pf1ar-root .item-list-header {
@@ -1832,6 +1843,15 @@
   opacity: 0.58;
 }
 
+.pf1ar-root .item-list > .item.empty .item-name h4 {
+  text-decoration: line-through;
+  opacity: 0.68;
+}
+
+.pf1ar-root .item-list > .item.broken .item-name h4 {
+  color: var(--pf1ar-danger);
+}
+
 .pf1ar-root .item-list > .item > *:not(:last-child),
 .pf1ar-root .item-list-header > *:not(:last-child) {
   border-right: 1px solid rgb(202 191 159 / 42%);
@@ -1862,6 +1882,28 @@
 
 .pf1ar-root .item-name.rollable h4 {
   color: var(--pf1ar-action);
+}
+
+.pf1ar-root .item-name .quantity {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  margin-top: 1px;
+  color: var(--pf1ar-gold);
+  font-family: var(--pf1ar-font-number);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.pf1ar-root .item-name .quantity::before {
+  content: "(";
+}
+
+.pf1ar-root .item-name .quantity::after {
+  content: ")";
+}
+
+.pf1ar-root .item-name .quantity.empty {
+  color: var(--pf1ar-danger);
 }
 
 .pf1ar-root .item-image {
@@ -1896,6 +1938,19 @@
   text-overflow: ellipsis;
 }
 
+.pf1ar-root .item-detail a.item-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  color: var(--pf1ar-ink-muted);
+}
+
+.pf1ar-root .item-detail a.item-control:hover {
+  color: var(--pf1ar-action);
+  text-shadow: 0 0 5px rgb(43 91 124 / 25%);
+}
+
 .pf1ar-root .item-detail.item-actions { flex-basis: 40px; }
 .pf1ar-root .item-detail.item-uses { flex-basis: 68px; }
 .pf1ar-root .item-detail.item-attacks { flex-basis: 86px; }
@@ -1919,6 +1974,19 @@
   min-width: 30px;
   max-width: 50px;
   padding: 1px 3px;
+}
+
+.pf1ar-inventory .pf1ar-inventory-list > .item-list-header,
+.pf1ar-inventory .pf1ar-inventory-list > .item {
+  display: grid;
+  grid-template-columns: var(--pf1ar-inv-columns);
+  align-items: stretch;
+}
+
+.pf1ar-inventory .pf1ar-inventory-list > :is(.item-list-header, .item) > :is(.item-name, .item-detail, .item-controls) {
+  width: auto;
+  min-width: 0;
+  flex: none;
 }
 
 .pf1ar-root .item-controls {
@@ -1948,6 +2016,58 @@
 
 .pf1ar-root .item-controls .item-delete:hover {
   color: var(--pf1ar-danger);
+}
+
+.pf1ar-inventory .item-controls {
+  flex-basis: 128px;
+  justify-content: space-evenly;
+  gap: 0;
+  padding-inline: 4px;
+}
+
+.pf1ar-inventory .item-controls a.disabled {
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.pf1ar-root .item-summary,
+.pf1ar-root .action-summary {
+  flex: 0 0 100%;
+  grid-column: 1 / -1;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 5px;
+  padding: 8px 10px;
+  border-top: 1px solid var(--pf1ar-line-strong);
+  border-right: 0 !important;
+  background: linear-gradient(180deg, rgb(255 253 247 / 92%), rgb(244 236 216 / 78%));
+  color: var(--pf1ar-ink-soft);
+  font-size: 12px;
+  line-height: 1.45;
+  white-space: normal;
+}
+
+.pf1ar-root .item-summary .description,
+.pf1ar-root .action-summary .description {
+  padding: 8px 10px;
+  border: 1px solid var(--pf1ar-line);
+  border-radius: var(--pf1ar-radius-sm);
+  background: var(--pf1ar-surface-raised);
+}
+
+.pf1ar-root .item-summary .description :first-child,
+.pf1ar-root .action-summary .description :first-child {
+  margin-top: 0;
+}
+
+.pf1ar-root .item-summary .description :last-child,
+.pf1ar-root .action-summary .description :last-child {
+  margin-bottom: 0;
+}
+
+.pf1ar-root .item-summary .item-properties,
+.pf1ar-root .action-summary .item-properties {
+  padding-top: 2px;
 }
 
 .pf1ar-root .item-action {
@@ -2996,15 +3116,16 @@
 
 .pf1ar-skills-tab .pf1ar-skill-table-header {
   min-height: 38px;
-  color: #fff9ea;
-  border-bottom: 1px solid #602020;
-  background: linear-gradient(180deg, #873333, #6f2424);
+  color: var(--pf1ar-accent);
+  border-bottom: 1px solid var(--pf1ar-line-strong);
+  background: linear-gradient(180deg, #f5eddc, #eee3ca);
   font-family: var(--pf1ar-font-title);
-  font-size: 14px;
+  font-size: 13px;
   font-variant: small-caps;
   font-weight: 800;
   letter-spacing: 0.025em;
   list-style: none;
+  text-transform: uppercase;
 }
 
 .pf1ar-skills-tab .pf1ar-skill-table-header > span {
@@ -3012,15 +3133,19 @@
   place-items: center;
   align-self: stretch;
   padding: 6px 4px;
-  border-left: 1px solid rgb(255 255 255 / 18%);
+  border-left: 1px solid rgb(202 191 159 / 42%);
   text-align: center;
 }
 
 .pf1ar-skills-tab .pf1ar-skill-table-header .pf1ar-skill-heading {
-  grid-column: 1 / 3;
+  grid-column: 1;
   place-items: center start;
   padding-left: 10px;
   border-left: 0;
+}
+
+.pf1ar-skills-tab .pf1ar-skill-table-header .pf1ar-roll-heading {
+  grid-column: 2;
 }
 
 .pf1ar-skills-tab .pf1ar-skill-table-header .pf1ar-mod-heading {
@@ -3047,6 +3172,10 @@
   grid-column: 8;
 }
 
+.pf1ar-skills-tab .pf1ar-skill-table-header .pf1ar-controls-heading {
+  grid-column: 9;
+}
+
 .pf1ar-skills-tab .skills-list > .skill {
   min-height: 38px;
   border-bottom: 1px solid #efe6d0;
@@ -3066,7 +3195,11 @@
 }
 
 .pf1ar-skills-tab .skills-list > .sub-skill {
-  padding-left: 18px;
+  padding-left: 0;
+}
+
+.pf1ar-skills-tab .skills-list > .sub-skill .skill-name {
+  padding-left: 26px;
 }
 
 .pf1ar-skills-tab .skill > * {
@@ -3831,7 +3964,7 @@
   background: rgb(255 255 255 / 7%);
 }
 
-/* Skill table header — red gradient → dark with gold heading text */
+/* Skill table header — dark mode keeps the same table hierarchy. */
 .pf1ar-dark .pf1ar-skills-tab .pf1ar-skill-table-header {
   color: var(--pf1ar-gold-light);
   border-bottom-color: rgb(0 0 0 / 40%);

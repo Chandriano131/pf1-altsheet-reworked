@@ -12,7 +12,7 @@ The **Pathfinder 1e for Foundry VTT** system was also used as a reference for co
 
 ## Status
 
-> **Active development — visual rework release (v0.2.0)**
+> **Active development — visual rework release (v0.2.1)**
 
 Implemented:
 - [x] Correct registration of the alternative sheet for PF1E actors (character and NPC)

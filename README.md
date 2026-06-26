@@ -12,7 +12,7 @@ The **Pathfinder 1e for Foundry VTT** system was also used as a reference for co
 
 ## Status
 
-> **Active development — visual rework release (v0.2.1)**
+> **Active development — container inventory release (v0.2.2)**
 
 Implemented:
 - [x] Correct registration of the alternative sheet for PF1E actors (character and NPC)
@@ -20,6 +20,7 @@ Implemented:
 - [x] Persistent header with portrait, name, biographical info, and level
 - [x] Icon-based tab navigation with clear active states
 - [x] Custom layouts for Attributes, Combat, Inventory, Features, Skills and Buffs
+- [x] Inline container contents in Inventory, with child tables, fixed columns and drag-and-drop support
 - [x] PF1E spellbook and settings partials integrated with the module visual language
 - [x] Rollable stats (abilities, saves, initiative, BAB/CMB, attacks, skills) wired to the PF1E roll API
 - [x] Animated d20 hover on rollable dice icons (Skills, Attributes, Combat, Inventory, Spells)

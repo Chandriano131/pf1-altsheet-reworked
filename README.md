@@ -10,7 +10,7 @@ The **Pathfinder 1e for Foundry VTT** system was also used as a reference for co
 
 ## Status
 
-> **Active development — container inventory release (v0.2.2)**
+> **Active development — polish and integration release (v0.2.3)**
 
 Implemented:
 - [x] Correct registration of the alternative sheet for PF1E actors (character and NPC)

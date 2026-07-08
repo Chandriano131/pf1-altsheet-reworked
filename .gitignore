@@ -9,4 +9,6 @@ CLAUDE.md
 AGENTS.md
 context.md
 .claude/
+docs/arquitetura.md
+docs/convencoes-de-codigo.md
 docs/context.md

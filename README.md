@@ -8,8 +8,6 @@ This module is a modernization and recreation of the original **PF1 Alt Sheet** 
 
 The **Pathfinder 1e for Foundry VTT** system was also used as a reference for compatibility, data structure, and integration with Foundry VTT v13.
 
-> **AI Disclosure:** This module was developed with assistance from AI tools — including **Claude (Anthropic)** and **OpenAI Codex** — for code generation, refactoring, visual review and documentation support. Authorship, review and final responsibility belong to the maintainers of this repository, Anthropic and OpenAI.
-
 ## Status
 
 > **Active development — container inventory release (v0.2.2)**
@@ -25,17 +23,17 @@ Implemented:
 - [x] Rollable stats (abilities, saves, initiative, BAB/CMB, attacks, skills) wired to the PF1E roll API
 - [x] Animated d20 hover on rollable dice icons (Skills, Attributes, Combat, Inventory, Spells)
 - [x] **Dark mode** toggle (per-user), button at the top-left above the portrait
+- [x] **Three selectable visual themes** (Refined Parchment, Hybrid native-like, Neutral Slate), each combinable with dark mode
+- [x] **Compact mode** (per-user) for denser inventory and container layouts
+- [x] Configurable Summary skill list (ranked / class skills / all)
+- [x] Empty-container drop zone, drag grips and tokenized drop feedback
 - [x] Responsive layouts for narrower sheet windows
 - [x] English and Brazilian Portuguese module labels
 
 Planned:
-- [ ] Additional visual themes (Pathfinder, Default, etc.)
 - [ ] Additional localization (de, es)
 
 ## Known Limitations
-
-- The Summary tab only shows skills with at least 1 rank (intentional condensed list)
-- Some complex areas intentionally reuse PF1E 11.11 partials to preserve system behavior
 - Targeted at Foundry VTT v13 and PF1E 11.11; Foundry v14 is not currently supported
 
 ## Manual Installation
@@ -62,7 +60,6 @@ All credits to the original authors of the base module and the PF1E system must 
 
 - **PF1 Alt Sheet** (original): Tryss Farron (Fair Strides), Zenvy
 - **Pathfinder 1e for Foundry VTT**: PF1E system development team (to confirm)
-- **AI assistance**: Claude (Anthropic) and OpenAI Codex were used for code generation, refactoring, visual review and documentation support
 
 ## License
 

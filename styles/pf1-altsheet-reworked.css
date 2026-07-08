@@ -22,6 +22,9 @@
   --pf1ar-action: #2f6d72;
   --pf1ar-action-soft: #e8f0ef;
   --pf1ar-danger: #9b2f2f;
+  --pf1ar-heal: #3b8a4e;
+  --pf1ar-drop: #2b5b7c;
+  --pf1ar-drop-bg: rgb(43 91 124 / 9%);
   --pf1ar-shadow-sm: 0 1px 2px rgb(43 34 24 / 7%);
   --pf1ar-shadow-md: 0 5px 16px rgb(58 44 24 / 14%);
   --pf1ar-radius-sm: 5px;
@@ -37,7 +40,7 @@
   overflow: hidden;
   color: var(--pf1ar-ink);
   background:
-    linear-gradient(180deg, rgb(255 253 247 / 92%), rgb(247 241 227 / 96%)),
+    linear-gradient(180deg, color-mix(in srgb, var(--pf1ar-surface-raised) 92%, transparent), color-mix(in srgb, var(--pf1ar-surface-muted) 96%, transparent)),
     url("../../../ui/parchment.jpg") repeat;
   font-family: var(--pf1ar-font-body);
   font-size: var(--font-size-13, 13px);
@@ -57,7 +60,7 @@
   overflow: hidden;
   color: var(--pf1ar-ink);
   background:
-    linear-gradient(180deg, rgb(250 246 236 / 97%), rgb(247 241 227 / 97%)),
+    linear-gradient(180deg, color-mix(in srgb, var(--pf1ar-surface) 97%, transparent), color-mix(in srgb, var(--pf1ar-surface-muted) 97%, transparent)),
     url("../../../ui/parchment.jpg") repeat;
   font-family: var(--pf1ar-font-body);
 }
@@ -104,7 +107,7 @@
   color: var(--pf1ar-ink);
   border: 1px solid var(--pf1ar-line-strong);
   border-radius: var(--pf1ar-radius-sm);
-  background: rgb(255 253 247 / 74%);
+  background: color-mix(in srgb, var(--pf1ar-surface-raised) 74%, transparent);
   box-shadow: none;
 }
 
@@ -129,7 +132,7 @@
 .pf1ar-root :is(input, select, textarea):focus {
   outline: none;
   border-color: var(--pf1ar-action);
-  box-shadow: 0 0 0 2px rgb(47 109 114 / 14%);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--pf1ar-action) 14%, transparent);
 }
 
 .pf1ar-root input[type="checkbox"] {
@@ -161,7 +164,7 @@
   min-height: 126px;
   padding: 18px 22px 16px;
   border-bottom: 1px solid var(--pf1ar-line);
-  background: linear-gradient(180deg, #fffdf7 0%, #f6efdf 100%);
+  background: linear-gradient(180deg, var(--pf1ar-surface-raised) 0%, color-mix(in srgb, var(--pf1ar-surface), var(--pf1ar-surface-muted)) 100%);
 }
 
 .pf1ar-header::before {
@@ -178,7 +181,7 @@
   padding: 3px;
   border-radius: var(--pf1ar-radius-lg);
   background: linear-gradient(135deg, var(--pf1ar-gold), var(--pf1ar-accent));
-  box-shadow: 0 6px 16px rgb(124 46 42 / 24%);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--pf1ar-accent) 24%, transparent);
 }
 
 .pf1ar-portrait {
@@ -244,9 +247,9 @@
   min-height: 24px;
   padding: 3px 9px;
   color: var(--pf1ar-ink-soft);
-  border: 1px solid #e0d3b4;
+  border: 1px solid var(--pf1ar-line);
   border-radius: 999px;
-  background: #efe6d0;
+  background: color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep));
   font-size: 11px;
   font-weight: 700;
   line-height: 1;
@@ -273,7 +276,7 @@
 
 .pf1ar-alignment-badge {
   color: var(--pf1ar-action);
-  border-color: #cfe0de;
+  border-color: color-mix(in srgb, var(--pf1ar-action) 25%, var(--pf1ar-surface-raised));
   background: var(--pf1ar-action-soft);
 }
 
@@ -281,7 +284,7 @@
   display: inline-flex;
   align-items: center;
   overflow: hidden;
-  border: 1px solid #cfe0de;
+  border: 1px solid color-mix(in srgb, var(--pf1ar-action) 25%, var(--pf1ar-surface-raised));
   border-radius: 999px;
   background: var(--pf1ar-action-soft);
 }
@@ -300,7 +303,7 @@
   width: 24px;
   min-height: 22px;
   color: var(--pf1ar-action);
-  border-left: 1px solid #cfe0de;
+  border-left: 1px solid color-mix(in srgb, var(--pf1ar-action) 25%, var(--pf1ar-surface-raised));
   font-size: 10px;
 }
 
@@ -355,7 +358,7 @@
   padding: 5px 7px;
   border: 1px solid var(--pf1ar-line);
   border-radius: var(--pf1ar-radius);
-  background: rgb(255 253 247 / 68%);
+  background: color-mix(in srgb, var(--pf1ar-surface-raised) 68%, transparent);
   box-shadow: var(--pf1ar-shadow-sm);
 }
 
@@ -522,9 +525,9 @@
   height: 7px;
   margin-top: 5px;
   overflow: hidden;
-  border: 1px solid #ddd0b0;
+  border: 1px solid color-mix(in srgb, var(--pf1ar-line), var(--pf1ar-line-strong));
   border-radius: 999px;
-  background: #e7dcc2;
+  background: var(--pf1ar-surface-deep);
 }
 
 .pf1ar-xp-fill {
@@ -557,14 +560,15 @@
   flex: 0 0 auto;
   flex-flow: row nowrap;
   align-items: stretch;
-  gap: 2px;
+  /* Sem vão entre os botões — o separador visual é o hover/underline. */
+  gap: 0;
   min-height: 38px;
   margin: 0;
   padding: 0 14px;
   overflow-x: auto;
   overflow-y: hidden;
   border: 0;
-  border-bottom: 1px solid #e0d3b4;
+  border-bottom: 1px solid var(--pf1ar-line);
   background: var(--pf1ar-surface-muted);
   scrollbar-width: thin;
 }
@@ -572,12 +576,14 @@
 .pf1ar-root nav.tabs > .item {
   position: relative;
   display: inline-flex;
-  flex: 0 0 auto;
+  /* Base zero: todas as abas dividem a barra em larguras iguais. */
+  flex: 1 1 0;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  min-width: 42px;
+  min-width: 0;
   min-height: 38px;
+  overflow: hidden;
   padding: 8px 10px 7px;
   color: var(--pf1ar-ink-muted);
   border: 0;
@@ -586,28 +592,33 @@
   font-family: var(--pf1ar-font-title);
   font-size: 15px;
   font-variant: small-caps;
+  /* Peso fixo: negrito só na ativa alargava a aba e "empurrava" as vizinhas. */
+  font-weight: 600;
   letter-spacing: 0.025em;
   line-height: 1;
   white-space: nowrap;
   text-shadow: none;
+  transition: color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
 }
 
 .pf1ar-root nav.tabs > .item i {
   color: var(--pf1ar-ink-muted);
   font-family: var(--font-awesome);
   font-size: 12px;
+  transition: color 0.18s ease;
 }
 
 .pf1ar-root nav.tabs > .item:hover {
   color: var(--pf1ar-accent);
-  background: rgb(255 253 247 / 42%);
+  background: color-mix(in srgb, var(--pf1ar-surface-raised) 42%, transparent);
 }
 
 .pf1ar-root nav.tabs > .item.active {
   color: var(--pf1ar-accent);
   border-bottom-color: var(--pf1ar-accent);
-  background: linear-gradient(180deg, rgb(255 253 247 / 72%), rgb(255 253 247 / 20%));
-  font-weight: 700;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--pf1ar-surface-raised) 72%, transparent), color-mix(in srgb, var(--pf1ar-surface-raised) 20%, transparent));
+  /* Mesmo peso da inativa — o realce vem de cor/fundo/underline, sem reflow. */
+  font-weight: 600;
 }
 
 .pf1ar-root nav.tabs > .item.active i {
@@ -618,10 +629,13 @@
 .pf1ar-root .pf1ar-skills-tab nav.tabs {
   min-height: 34px;
   margin: 8px 0 10px;
-  padding: 0 6px;
+  /* Sem padding lateral + overflow hidden: os .item preenchem a barra até a
+     borda, com o fundo da aba ativa recortado pelos cantos arredondados. */
+  padding: 0;
+  overflow: hidden;
   border: 1px solid var(--pf1ar-line);
   border-radius: var(--pf1ar-radius);
-  background: rgb(243 236 218 / 78%);
+  background: color-mix(in srgb, var(--pf1ar-surface-muted) 78%, transparent);
 }
 
 .pf1ar-root nav.tabs.spellbooks > .item,
@@ -739,7 +753,7 @@
   height: 1px;
   margin-left: 4px;
   content: "";
-  background: linear-gradient(90deg, rgb(124 46 42 / 34%), rgb(124 46 42 / 0%));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--pf1ar-accent) 34%, transparent), color-mix(in srgb, var(--pf1ar-accent) 0%, transparent));
 }
 
 .pf1ar-panel-title > i {
@@ -850,7 +864,7 @@
 
 .pf1ar-stat-box:is(.pf1ar-rollable, [data-action]):hover {
   border-color: var(--pf1ar-action);
-  box-shadow: 0 3px 12px rgb(47 109 114 / 15%);
+  box-shadow: 0 3px 12px color-mix(in srgb, var(--pf1ar-action) 15%, transparent);
   transform: translateY(-1px);
 }
 
@@ -923,13 +937,13 @@
 
 .pf1ar-ability:hover {
   border-color: var(--pf1ar-gold);
-  box-shadow: 0 3px 12px rgb(176 125 44 / 16%);
+  box-shadow: 0 3px 12px color-mix(in srgb, var(--pf1ar-gold) 16%, transparent);
   transform: translateX(2px);
 }
 
 .pf1ar-ability.pf1ar-damaged {
-  border-color: #d49a91;
-  background: #fff4ef;
+  border-color: color-mix(in srgb, var(--pf1ar-danger) 40%, var(--pf1ar-surface-raised));
+  background: color-mix(in srgb, var(--pf1ar-danger) 5%, var(--pf1ar-surface-raised));
 }
 
 .pf1ar-ability-name {
@@ -956,7 +970,7 @@
 .pf1ar-ability-mod {
   padding: 4px 5px;
   color: var(--pf1ar-action);
-  border: 1px solid #cfe0de;
+  border: 1px solid color-mix(in srgb, var(--pf1ar-action) 25%, var(--pf1ar-surface-raised));
   border-radius: 7px;
   background: var(--pf1ar-action-soft);
   font-family: var(--pf1ar-font-number);
@@ -971,12 +985,12 @@
   gap: 8px;
   min-height: 30px;
   padding: 6px 8px;
-  border-bottom: 1px solid #efe6d0;
-  background: rgb(255 253 247 / 68%);
+  border-bottom: 1px solid color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep));
+  background: color-mix(in srgb, var(--pf1ar-surface-raised) 68%, transparent);
 }
 
 .pf1ar-detail-row:nth-of-type(even) {
-  background: rgb(243 236 218 / 62%);
+  background: color-mix(in srgb, var(--pf1ar-surface-muted) 62%, transparent);
 }
 
 .pf1ar-detail-label {
@@ -1019,7 +1033,7 @@
   border: 1px solid #6d2925;
   border-radius: var(--pf1ar-radius-lg);
   background: linear-gradient(135deg, var(--pf1ar-accent), var(--pf1ar-accent-deep));
-  box-shadow: 0 4px 14px rgb(124 46 42 / 24%);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--pf1ar-accent) 24%, transparent);
 }
 
 .pf1ar-hp .pf1ar-panel-title {
@@ -1115,8 +1129,8 @@
 .pf1ar-root .pf1ar-rest-button:hover {
   color: var(--pf1ar-accent-deep);
   border-color: var(--pf1ar-gold);
-  background: #fbf3e2;
-  box-shadow: 0 3px 12px rgb(176 125 44 / 18%);
+  background: color-mix(in srgb, var(--pf1ar-surface-raised), var(--pf1ar-surface-muted));
+  box-shadow: 0 3px 12px color-mix(in srgb, var(--pf1ar-gold) 18%, transparent);
 }
 
 .pf1ar-root .pf1ar-rest-button:active {
@@ -1143,7 +1157,7 @@
   gap: 8px;
   min-height: 31px;
   padding: 5px 9px;
-  border-bottom: 1px solid #efe6d0;
+  border-bottom: 1px solid color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep));
   background: transparent;
 }
 
@@ -1152,11 +1166,11 @@
 }
 
 .pf1ar-skill:nth-child(even) {
-  background: rgb(243 236 218 / 50%);
+  background: color-mix(in srgb, var(--pf1ar-surface-muted) 50%, transparent);
 }
 
 .pf1ar-skill:hover {
-  background: #f6efdc;
+  background: color-mix(in srgb, var(--pf1ar-surface), var(--pf1ar-surface-muted));
 }
 
 .pf1ar-skill-name {
@@ -1269,7 +1283,7 @@
   padding: 6px 10px;
   color: var(--pf1ar-accent);
   border-bottom: 1px solid var(--pf1ar-line);
-  background: linear-gradient(180deg, #f5eddc, #eee3ca);
+  background: linear-gradient(180deg, var(--pf1ar-surface-muted), color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep)));
   font-family: var(--pf1ar-font-title);
   font-size: 16px;
   font-variant: small-caps;
@@ -1294,7 +1308,7 @@
   color: var(--pf1ar-ink-soft);
   border: 1px solid var(--pf1ar-line-strong);
   border-radius: 6px;
-  background: rgb(255 253 247 / 66%);
+  background: color-mix(in srgb, var(--pf1ar-surface-raised) 66%, transparent);
 }
 
 .pf1ar-class-group-controls a:hover {
@@ -1303,9 +1317,22 @@
   background: var(--pf1ar-surface-raised);
 }
 
+/* O grupo de classes recebe a classe `item-list` só para o Koboldworks Item
+   Hints casar `.item-list .item` — anula a caixa de inventário da regra base
+   `.pf1ar-root .item-list` (min-width/borda/fundo/sombra) que não se aplica aqui. */
+.pf1ar-root .pf1ar-class-group.item-list {
+  min-width: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
 .pf1ar-class-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+  /* Uma classe por linha: coluna única, cada classe nova empilha para baixo. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 9px;
   padding: 9px;
 }
@@ -1319,13 +1346,13 @@
   overflow: hidden;
   border: 1px solid var(--pf1ar-line);
   border-radius: var(--pf1ar-radius);
-  background: #fffdf7;
+  background: var(--pf1ar-surface-raised);
   transition: border-color 120ms ease, box-shadow 120ms ease;
 }
 
 .pf1ar-class-card:hover {
   border-color: var(--pf1ar-gold);
-  box-shadow: 0 3px 12px rgb(176 125 44 / 15%);
+  box-shadow: 0 3px 12px color-mix(in srgb, var(--pf1ar-gold) 15%, transparent);
 }
 
 .pf1ar-root .pf1ar-class-card .pf1ar-class-identity {
@@ -1488,8 +1515,8 @@
 }
 
 .pf1ar-ability-card.pf1ar-damaged {
-  border-color: #d49a91;
-  box-shadow: inset 0 0 0 1px rgb(155 47 47 / 12%);
+  border-color: color-mix(in srgb, var(--pf1ar-danger) 40%, var(--pf1ar-surface-raised));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pf1ar-danger) 12%, transparent);
 }
 
 .pf1ar-ability-card-title {
@@ -1501,7 +1528,7 @@
   padding: 6px 9px;
   color: var(--pf1ar-accent);
   border-bottom: 1px solid var(--pf1ar-line);
-  background: linear-gradient(180deg, #f6efdf, #f1e8d2);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--pf1ar-surface), var(--pf1ar-surface-muted)), color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep)));
   font-family: var(--pf1ar-font-title);
   font-size: 14px;
   font-variant: small-caps;
@@ -1544,7 +1571,7 @@
 .pf1ar-ability-card-adjustments {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  border-top: 1px solid #efe6d0;
+  border-top: 1px solid color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep));
 }
 
 .pf1ar-ability-card-adjustments label {
@@ -1553,7 +1580,7 @@
   align-items: center;
   gap: 2px;
   padding: 5px 2px;
-  border-right: 1px solid #efe6d0;
+  border-right: 1px solid color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep));
 }
 
 .pf1ar-ability-card-adjustments label:last-child {
@@ -1592,6 +1619,26 @@
 .pf1ar-skills-tab,
 .pf1ar-spells {
   gap: 10px;
+}
+
+/* Feats-filho (links.children) aninhados sob o feat-pai: indenta o nome pela
+   profundidade e prefixa um conector, mantendo as demais colunas alinhadas. */
+.pf1ar-root .pf1ar-features .item-list > .item.pf1ar-link-child .item-name {
+  padding-left: calc(9px + var(--pf1ar-link-depth, 1) * 18px);
+}
+
+.pf1ar-root .pf1ar-features .item-list > .item.pf1ar-link-child .item-name::before {
+  content: "\21B3"; /* ↳ */
+  align-self: center;
+  margin-right: 4px;
+  color: var(--pf1ar-ink-muted);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.pf1ar-root .pf1ar-features .item-list > .item.pf1ar-link-child .item-image {
+  width: 27px;
+  height: 27px;
 }
 
 .pf1ar-combat-header .pf1ar-stat-row {
@@ -1707,7 +1754,7 @@
   padding: 6px 8px;
   border: 1px solid var(--pf1ar-line);
   border-radius: var(--pf1ar-radius);
-  background: rgb(255 253 247 / 72%);
+  background: color-mix(in srgb, var(--pf1ar-surface-raised) 72%, transparent);
 }
 
 .pf1ar-root .item-search {
@@ -1805,7 +1852,7 @@
   min-height: 34px;
   color: var(--pf1ar-ink-soft);
   border-bottom: 1px solid var(--pf1ar-line-strong);
-  background: linear-gradient(180deg, #f5eddc, #eee3ca);
+  background: linear-gradient(180deg, var(--pf1ar-surface-muted), color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep)));
 }
 
 .pf1ar-root .item-list-header h3 {
@@ -1823,7 +1870,7 @@
 
 .pf1ar-root .item-list > .item {
   min-height: 34px;
-  border-bottom: 1px solid #efe6d0;
+  border-bottom: 1px solid color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep));
   background: var(--pf1ar-surface-raised);
 }
 
@@ -1832,11 +1879,11 @@
 }
 
 .pf1ar-root .item-list > .item:nth-child(odd) {
-  background: rgb(243 236 218 / 34%);
+  background: color-mix(in srgb, var(--pf1ar-surface-muted) 34%, transparent);
 }
 
 .pf1ar-root .item-list > .item:hover {
-  background: #f4ecd8;
+  background: var(--pf1ar-surface-muted);
 }
 
 .pf1ar-root .item-list > .item.disabled {
@@ -1854,7 +1901,7 @@
 
 .pf1ar-root .item-list > .item > *:not(:last-child),
 .pf1ar-root .item-list-header > *:not(:last-child) {
-  border-right: 1px solid rgb(202 191 159 / 42%);
+  border-right: 1px solid color-mix(in srgb, var(--pf1ar-line-strong) 42%, transparent);
 }
 
 .pf1ar-root .item-name {
@@ -1948,7 +1995,7 @@
 
 .pf1ar-root .item-detail a.item-control:hover {
   color: var(--pf1ar-action);
-  text-shadow: 0 0 5px rgb(43 91 124 / 25%);
+  text-shadow: 0 0 5px color-mix(in srgb, var(--pf1ar-drop) 25%, transparent);
 }
 
 .pf1ar-root .item-detail.item-actions { flex-basis: 40px; }
@@ -2016,7 +2063,7 @@
 }
 
 .pf1ar-inventory .pf1ar-inventory-list > .item.pf1ar-container-row.pf1ar-container-drop-hover > :is(.item-name, .item-detail, .item-controls) {
-  background: rgb(43 91 124 / 9%);
+  background: var(--pf1ar-drop-bg);
 }
 
 .pf1ar-root .item-controls {
@@ -2070,7 +2117,7 @@
   padding: 8px 10px;
   border-top: 1px solid var(--pf1ar-line-strong);
   border-right: 0 !important;
-  background: linear-gradient(180deg, rgb(255 253 247 / 92%), rgb(244 236 216 / 78%));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--pf1ar-surface-raised) 92%, transparent), color-mix(in srgb, var(--pf1ar-surface-muted) 78%, transparent));
   color: var(--pf1ar-ink-soft);
   font-size: 12px;
   line-height: 1.45;
@@ -2108,15 +2155,15 @@
   margin: 0;
   overflow: hidden;
   border: 0;
-  border-top: 1px solid rgb(133 92 46 / 26%);
+  border-top: 1px solid color-mix(in srgb, var(--pf1ar-gold) 26%, transparent);
   border-right: 0 !important;
   border-radius: 0;
-  background: linear-gradient(180deg, rgb(255 251 241 / 94%), rgb(244 235 214 / 84%));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--pf1ar-surface-raised) 94%, transparent), color-mix(in srgb, var(--pf1ar-surface-muted) 84%, transparent));
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 70%);
 }
 
 .pf1ar-container-contents.pf1ar-container-drop-hover {
-  outline: 2px dashed rgb(43 91 124 / 55%);
+  outline: 2px dashed var(--pf1ar-drop);
   outline-offset: -5px;
 }
 
@@ -2128,8 +2175,8 @@
   min-height: 32px;
   padding: 5px 9px;
   color: var(--pf1ar-ink-soft);
-  border-bottom: 1px solid rgb(202 191 159 / 48%);
-  background: linear-gradient(180deg, #efe4ca, #e7d7b8);
+  border-bottom: 1px solid color-mix(in srgb, var(--pf1ar-line-strong) 48%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep)), var(--pf1ar-surface-deep));
   cursor: pointer;
   list-style: none;
 }
@@ -2150,9 +2197,9 @@
   width: 22px;
   height: 22px;
   color: var(--pf1ar-gold);
-  border: 1px solid rgb(133 92 46 / 22%);
+  border: 1px solid color-mix(in srgb, var(--pf1ar-gold) 22%, transparent);
   border-radius: 999px;
-  background: rgb(255 253 248 / 56%);
+  background: color-mix(in srgb, var(--pf1ar-surface-raised) 56%, transparent);
   font-size: 16px;
   font-weight: 900;
   line-height: 1;
@@ -2162,7 +2209,7 @@
 
 .pf1ar-container-contents[open] summary::before {
   color: var(--pf1ar-action);
-  background: rgb(43 91 124 / 10%);
+  background: color-mix(in srgb, var(--pf1ar-drop) 10%, transparent);
   transform: rotate(90deg);
 }
 
@@ -2210,15 +2257,15 @@
   max-width: 100%;
   padding: 2px 6px;
   overflow: hidden;
-  border: 1px solid rgb(133 92 46 / 20%);
+  border: 1px solid color-mix(in srgb, var(--pf1ar-gold) 20%, transparent);
   border-radius: 999px;
-  background: rgb(255 253 248 / 74%);
+  background: color-mix(in srgb, var(--pf1ar-surface-raised) 74%, transparent);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .pf1ar-contained-list {
-  --pf1ar-contained-columns: minmax(210px, 1fr) 40px 72px 58px 46px 72px 124px;
+  --pf1ar-contained-columns: 20px minmax(210px, 1fr) 40px 72px 58px 46px 72px 124px;
 
   box-sizing: border-box;
   display: flex;
@@ -2226,21 +2273,21 @@
   margin: 8px;
   min-width: 0;
   overflow: hidden;
-  border: 1px solid rgb(202 191 159 / 52%);
+  border: 1px solid color-mix(in srgb, var(--pf1ar-line-strong) 52%, transparent);
   border-radius: var(--pf1ar-radius-sm);
   background: var(--pf1ar-surface-raised);
 }
 
 .pf1ar-contained-list.pf1ar-no-gm-column {
-  --pf1ar-contained-columns: minmax(210px, 1fr) 40px 72px 58px 72px 124px;
+  --pf1ar-contained-columns: 20px minmax(210px, 1fr) 40px 72px 58px 72px 124px;
 }
 
 .pf1ar-contained-list.pf1ar-readonly-list {
-  --pf1ar-contained-columns: minmax(210px, 1fr) 40px 72px 58px 46px 72px;
+  --pf1ar-contained-columns: 20px minmax(210px, 1fr) 40px 72px 58px 46px 72px;
 }
 
 .pf1ar-contained-list.pf1ar-readonly-list.pf1ar-no-gm-column {
-  --pf1ar-contained-columns: minmax(210px, 1fr) 40px 72px 58px 72px;
+  --pf1ar-contained-columns: 20px minmax(210px, 1fr) 40px 72px 58px 72px;
 }
 
 .pf1ar-contained-list + .pf1ar-contained-list {
@@ -2259,8 +2306,8 @@
 
 .pf1ar-contained-header {
   color: var(--pf1ar-ink-soft);
-  border-bottom: 1px solid rgb(202 191 159 / 58%);
-  background: linear-gradient(180deg, #f7efd9, #efe4ca);
+  border-bottom: 1px solid color-mix(in srgb, var(--pf1ar-line-strong) 58%, transparent);
+  background: linear-gradient(180deg, var(--pf1ar-surface-muted), color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep)));
 }
 
 .pf1ar-contained-header h4 {
@@ -2278,8 +2325,8 @@
 }
 
 .pf1ar-contained-row {
-  border-bottom: 1px solid rgb(239 230 208 / 86%);
-  background: rgb(255 253 248 / 78%);
+  border-bottom: 1px solid color-mix(in srgb, var(--pf1ar-surface-deep) 86%, transparent);
+  background: color-mix(in srgb, var(--pf1ar-surface-raised) 78%, transparent);
   cursor: grab;
 }
 
@@ -2288,7 +2335,7 @@
 }
 
 .pf1ar-contained-row:nth-child(odd) {
-  background: rgb(247 241 225 / 56%);
+  background: color-mix(in srgb, var(--pf1ar-surface-muted) 56%, transparent);
 }
 
 .pf1ar-contained-row:last-child {
@@ -2296,7 +2343,7 @@
 }
 
 .pf1ar-contained-row:hover {
-  background: #f8efd9;
+  background: var(--pf1ar-surface-muted);
 }
 
 .pf1ar-contained-row.disabled {
@@ -2314,7 +2361,7 @@
 
 .pf1ar-contained-header > *:not(:last-child),
 .pf1ar-contained-row > *:not(:last-child) {
-  border-right: 1px solid rgb(202 191 159 / 36%);
+  border-right: 1px solid color-mix(in srgb, var(--pf1ar-line-strong) 36%, transparent);
 }
 
 .pf1ar-contained-header > *,
@@ -2376,12 +2423,12 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  box-shadow: 0 1px 1px rgb(45 31 16 / 12%);
+  box-shadow: 0 1px 1px color-mix(in srgb, var(--pf1ar-ink) 12%, transparent);
 }
 
 .pf1ar-contained-image:hover {
   border-color: var(--pf1ar-action);
-  box-shadow: 0 0 0 2px rgb(43 91 124 / 14%);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--pf1ar-drop) 14%, transparent);
 }
 
 .pf1ar-contained-detail,
@@ -2424,7 +2471,7 @@
 
 .pf1ar-contained-control:hover {
   color: var(--pf1ar-action);
-  text-shadow: 0 0 5px rgb(43 91 124 / 25%);
+  text-shadow: 0 0 5px color-mix(in srgb, var(--pf1ar-drop) 25%, transparent);
 }
 
 .pf1ar-contained-control.danger:hover {
@@ -2443,7 +2490,7 @@
   color: var(--pf1ar-ink);
   border: 1px solid var(--pf1ar-line);
   border-radius: 4px;
-  background: rgb(255 253 248 / 92%);
+  background: color-mix(in srgb, var(--pf1ar-surface-raised) 92%, transparent);
   font-family: var(--pf1ar-font-number);
   font-size: 10px;
   font-weight: 700;
@@ -2581,7 +2628,7 @@
 .pf1ar-condition.active {
   opacity: 1;
   border-color: var(--pf1ar-gold);
-  background: rgb(208 168 90 / 16%);
+  background: color-mix(in srgb, var(--pf1ar-gold) 16%, transparent);
   box-shadow: inset 4px 0 0 var(--pf1ar-gold);
 }
 
@@ -2665,7 +2712,7 @@
   color: var(--pf1ar-ink-soft);
   border: 0;
   border-bottom: 1px solid var(--pf1ar-line);
-  background: linear-gradient(180deg, #f5eddc, #eee3ca);
+  background: linear-gradient(180deg, var(--pf1ar-surface-muted), color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep)));
   font-family: var(--pf1ar-font-title);
   font-size: 12px;
   font-variant: small-caps;
@@ -2786,9 +2833,9 @@
   min-height: 21px;
   padding: 3px 7px;
   color: var(--pf1ar-ink-soft);
-  border: 1px solid #e0d3b4;
+  border: 1px solid var(--pf1ar-line);
   border-radius: 999px;
-  background: #efe6d0;
+  background: color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep));
   font-size: 9px;
   font-weight: 700;
 }
@@ -2836,13 +2883,26 @@
    vertically, but let the inner boxes fill the available width & height. */
 .pf1ar-spells .spellbook-configuration {
   flex: 0 0 auto;
+  /* O .spellbook-configuration também é .inventory-filters, então herdava
+     display:flex + flex-direction:row (+ moldura) da barra de filtro genérica
+     (regra ~1749), espremendo o .summary de lado e o painel de config para a
+     direita. Aqui empilhamos: summary (linha de info-boxes) em cima, painel de
+     config embaixo — ambos com a largura toda, adaptando ao tamanho da ficha. */
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
 }
 
 .pf1ar-spells .spellbook-configuration > .summary {
   align-items: stretch;
 }
 
-.pf1ar-spells .spellbook-configuration > .summary > * {
+/* Info-boxes dividem a largura por igual, mas o .spellcasting-config (só 2
+   botões) fica fora — senão a regra de crescer o inflava numa caixa enorme. */
+.pf1ar-spells .spellbook-configuration > .summary > *:not(.spellcasting-config) {
   flex: 1 1 0;
 }
 
@@ -2988,7 +3048,7 @@
 
 .pf1ar-spells .notification-box.warning > .value {
   color: var(--pf1ar-danger);
-  background: rgb(155 47 47 / 12%);
+  background: color-mix(in srgb, var(--pf1ar-danger) 12%, transparent);
 }
 
 .pf1ar-root .form-group,
@@ -3171,7 +3231,7 @@
 
 .pf1ar-root .pf1ar-pointbuy-button:hover {
   border-color: var(--pf1ar-gold);
-  background: #f8ecd3;
+  background: var(--pf1ar-surface-muted);
 }
 
 .pf1ar-armor-attr {
@@ -3246,7 +3306,7 @@
   padding: 12px;
   border: 1px solid var(--pf1ar-line);
   border-radius: var(--pf1ar-radius);
-  background: rgb(255 253 247 / 72%);
+  background: color-mix(in srgb, var(--pf1ar-surface-raised) 72%, transparent);
 }
 
 .pf1ar-carry-bonus {
@@ -3288,19 +3348,19 @@
   overflow: hidden;
   border: 1px solid var(--pf1ar-line-strong);
   border-radius: 7px;
-  background: #eee6d4;
+  background: color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep));
 }
 
 .pf1ar-load-fill {
   position: absolute;
   inset: 0 auto 0 0;
   max-width: 100%;
-  background: linear-gradient(90deg, #8fb5b2, var(--pf1ar-action));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--pf1ar-action) 55%, var(--pf1ar-surface-raised)), var(--pf1ar-action));
   opacity: 0.62;
 }
 
 .pf1ar-load-meter.encumbered .pf1ar-load-fill {
-  background: linear-gradient(90deg, #d59a62, var(--pf1ar-accent));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--pf1ar-accent) 25%, var(--pf1ar-gold-light)), var(--pf1ar-accent));
 }
 
 .pf1ar-load-label {
@@ -3459,7 +3519,7 @@
 
 .pf1ar-skills-tab .skill-lock-button.unlocked {
   color: var(--pf1ar-action);
-  border-color: #9fc2bf;
+  border-color: color-mix(in srgb, var(--pf1ar-action) 45%, var(--pf1ar-surface-raised));
   background: var(--pf1ar-action-soft);
 }
 
@@ -3498,7 +3558,7 @@
   min-height: 38px;
   color: var(--pf1ar-accent);
   border-bottom: 1px solid var(--pf1ar-line-strong);
-  background: linear-gradient(180deg, #f5eddc, #eee3ca);
+  background: linear-gradient(180deg, var(--pf1ar-surface-muted), color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep)));
   font-family: var(--pf1ar-font-title);
   font-size: 13px;
   font-variant: small-caps;
@@ -3513,7 +3573,7 @@
   place-items: center;
   align-self: stretch;
   padding: 6px 4px;
-  border-left: 1px solid rgb(202 191 159 / 42%);
+  border-left: 1px solid color-mix(in srgb, var(--pf1ar-line-strong) 42%, transparent);
   text-align: center;
 }
 
@@ -3558,20 +3618,20 @@
 
 .pf1ar-skills-tab .skills-list > .skill {
   min-height: 38px;
-  border-bottom: 1px solid #efe6d0;
+  border-bottom: 1px solid color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep));
 }
 
 .pf1ar-skills-tab .skills-list > .skill:nth-child(even) {
-  background: rgb(243 236 218 / 46%);
+  background: color-mix(in srgb, var(--pf1ar-surface-muted) 46%, transparent);
 }
 
 .pf1ar-skills-tab .skills-list > .skill:hover {
-  background: #f5ecd8;
+  background: var(--pf1ar-surface-muted);
 }
 
 .pf1ar-skills-tab .skills-list > .skill.arbitrary {
   grid-template-columns: minmax(220px, 1fr) 34px;
-  background: linear-gradient(180deg, #f5eddc, #eee3ca);
+  background: linear-gradient(180deg, var(--pf1ar-surface-muted), color-mix(in srgb, var(--pf1ar-surface-muted), var(--pf1ar-surface-deep)));
 }
 
 .pf1ar-skills-tab .skills-list > .sub-skill {
@@ -3852,7 +3912,7 @@
 }
 
 .pf1ar-root ::-webkit-scrollbar-thumb:hover {
-  background: #a98f63;
+  background: var(--pf1ar-ink-muted);
   background-clip: padding-box;
 }
 
@@ -3894,7 +3954,7 @@
 
   .pf1ar-skills-panel .pf1ar-skill:nth-child(4n + 2),
   .pf1ar-skills-panel .pf1ar-skill:nth-child(4n + 3) {
-    background: rgb(243 236 218 / 50%);
+    background: color-mix(in srgb, var(--pf1ar-surface-muted) 50%, transparent);
   }
 
   .pf1ar-ability-cards {
@@ -4069,10 +4129,6 @@
     grid-template-columns: 1fr;
   }
 
-  .pf1ar-class-list {
-    grid-template-columns: 1fr;
-  }
-
   .pf1ar-combat .defenses :is(.ac-cmd, .saves-sr) {
     flex-direction: column;
   }
@@ -4148,10 +4204,10 @@
    THEME TOGGLE BUTTON  (top-left, above the portrait)
    ========================================================================== */
 
-.pf1ar-theme-toggle {
+.pf1ar-theme-toggle,
+.pf1ar-theme-cycle {
   position: absolute;
   top: 7px;
-  left: 8px;
   z-index: 3;
   display: grid;
   place-items: center;
@@ -4166,12 +4222,17 @@
   transition: color 0.15s, transform 0.15s;
 }
 
-.pf1ar-theme-toggle:hover {
+.pf1ar-theme-toggle { left: 8px; }
+.pf1ar-theme-cycle { left: 34px; }
+
+.pf1ar-theme-toggle:hover,
+.pf1ar-theme-cycle:hover {
   color: var(--pf1ar-accent);
   transform: scale(1.12);
 }
 
-.pf1ar-theme-toggle > i {
+.pf1ar-theme-toggle > i,
+.pf1ar-theme-cycle > i {
   font-size: 14px;
 }
 
@@ -4200,27 +4261,34 @@
   --pf1ar-action: #67b3b9;
   --pf1ar-action-soft: #1d3236;
   --pf1ar-danger: #d76a6a;
+  --pf1ar-heal: #6bbd7f;
+  --pf1ar-drop: #6fa8c9;
+  --pf1ar-drop-bg: rgb(111 168 201 / 15%);
   --pf1ar-shadow-sm: 0 1px 2px rgb(0 0 0 / 38%);
   --pf1ar-shadow-md: 0 6px 18px rgb(0 0 0 / 48%);
 }
 
 .pf1ar-dark .window-content {
   background:
-    linear-gradient(180deg, rgb(31 35 42 / 95%), rgb(22 25 31 / 98%)),
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--pf1ar-surface) 95%, transparent),
+      color-mix(in srgb, var(--pf1ar-surface-deep) 98%, transparent)),
     url("../../../ui/parchment.jpg") repeat;
   background-blend-mode: multiply;
 }
 
 .pf1ar-dark .pf1ar-root {
   background:
-    linear-gradient(180deg, rgb(32 36 43 / 96%), rgb(22 25 31 / 98%)),
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--pf1ar-surface) 96%, transparent),
+      color-mix(in srgb, var(--pf1ar-surface-deep) 98%, transparent)),
     url("../../../ui/parchment.jpg") repeat;
   background-blend-mode: multiply;
 }
 
 /* Header & portrait frame */
 .pf1ar-dark .pf1ar-header {
-  background: linear-gradient(180deg, #2b3039 0%, #20242b 100%);
+  background: linear-gradient(180deg, var(--pf1ar-surface-raised) 0%, var(--pf1ar-surface) 100%);
 }
 
 /* Inputs / selects / textareas */
@@ -4259,16 +4327,16 @@
 
 /* Ability card title gradient */
 .pf1ar-dark .pf1ar-ability-card-title {
-  background: linear-gradient(180deg, #2c313a, #262b33);
+  background: linear-gradient(180deg, var(--pf1ar-surface-raised), var(--pf1ar-surface));
 }
 
 .pf1ar-dark .pf1ar-ability.pf1ar-damaged {
-  background: rgb(210 96 90 / 16%);
+  background: color-mix(in srgb, var(--pf1ar-danger) 16%, transparent);
 }
 
 /* Item lists (inventory / attacks / buffs / features) */
 .pf1ar-dark .pf1ar-root .item-list-header {
-  background: linear-gradient(180deg, #2c313a, #242931);
+  background: linear-gradient(180deg, var(--pf1ar-surface-raised), var(--pf1ar-surface));
 }
 
 .pf1ar-dark .pf1ar-root .item-list > .item:nth-child(odd) {
@@ -4280,21 +4348,21 @@
 }
 
 .pf1ar-dark .pf1ar-inventory .pf1ar-inventory-list > .item.pf1ar-container-row.pf1ar-container-drop-hover > :is(.item-name, .item-detail, .item-controls) {
-  background: rgb(103 179 185 / 12%);
+  background: var(--pf1ar-drop-bg);
 }
 
 .pf1ar-dark .pf1ar-container-contents {
-  border-color: rgb(216 176 102 / 22%);
-  background: linear-gradient(180deg, rgb(38 43 51 / 96%), rgb(29 33 39 / 94%));
+  border-color: color-mix(in srgb, var(--pf1ar-gold) 22%, transparent);
+  background: linear-gradient(180deg, var(--pf1ar-surface-raised), var(--pf1ar-surface-muted));
 }
 
 .pf1ar-dark .pf1ar-container-contents.pf1ar-container-drop-hover {
-  outline-color: rgb(103 179 185 / 62%);
+  outline-color: var(--pf1ar-drop);
 }
 
 .pf1ar-dark .pf1ar-container-contents summary {
   border-bottom-color: rgb(255 255 255 / 8%);
-  background: linear-gradient(180deg, #303641, #252b34);
+  background: linear-gradient(180deg, var(--pf1ar-surface-raised), var(--pf1ar-surface));
 }
 
 .pf1ar-dark .pf1ar-container-contents summary::before {
@@ -4303,7 +4371,7 @@
 }
 
 .pf1ar-dark .pf1ar-container-contents[open] summary::before {
-  background: rgb(103 179 185 / 12%);
+  background: color-mix(in srgb, var(--pf1ar-action) 12%, transparent);
 }
 
 .pf1ar-dark .pf1ar-container-contents-meta span {
@@ -4318,7 +4386,7 @@
 
 .pf1ar-dark .pf1ar-contained-header {
   border-bottom-color: rgb(255 255 255 / 8%);
-  background: linear-gradient(180deg, #2c313a, #242931);
+  background: linear-gradient(180deg, var(--pf1ar-surface-raised), var(--pf1ar-surface));
 }
 
 .pf1ar-dark .pf1ar-contained-header h4 {
@@ -4360,7 +4428,7 @@
 }
 
 .pf1ar-dark .pf1ar-skills-tab .skills-list > .skill.arbitrary {
-  background: linear-gradient(180deg, #2a2f37, #232830);
+  background: linear-gradient(180deg, var(--pf1ar-surface-raised), var(--pf1ar-surface));
 }
 
 .pf1ar-dark .pf1ar-skills-tab .skills-list > .skill {
@@ -4369,7 +4437,7 @@
 
 /* Conditions */
 .pf1ar-dark .pf1ar-condition.active {
-  background: rgb(210 96 90 / 18%);
+  background: color-mix(in srgb, var(--pf1ar-danger) 18%, transparent);
 }
 
 /* Buttons */
@@ -4428,7 +4496,7 @@
 .pf1ar-dark .pf1ar-skills-tab .pf1ar-skill-table-header {
   color: var(--pf1ar-gold-light);
   border-bottom-color: rgb(0 0 0 / 40%);
-  background: linear-gradient(180deg, #2f343d, #262b33);
+  background: linear-gradient(180deg, var(--pf1ar-surface-raised), var(--pf1ar-surface));
 }
 
 .pf1ar-dark .pf1ar-skills-tab .pf1ar-skill-table-header > span {
@@ -4436,12 +4504,12 @@
 }
 
 .pf1ar-dark .pf1ar-class-group-header {
-  background: linear-gradient(180deg, #2c313a, #242931);
+  background: linear-gradient(180deg, var(--pf1ar-surface-raised), var(--pf1ar-surface));
 }
 
 /* info-box headers (Combat defenses, Skill ranks, Spell config, etc.) */
 .pf1ar-dark .pf1ar-root .info-box > h5 {
-  background: linear-gradient(180deg, #2c313a, #242931);
+  background: linear-gradient(180deg, var(--pf1ar-surface-raised), var(--pf1ar-surface));
 }
 
 /* Inventory encumbrance footer */
@@ -4463,12 +4531,13 @@
 }
 
 .pf1ar-dark .pf1ar-panel-title::after {
-  background: linear-gradient(90deg, rgb(210 168 90 / 38%), rgb(210 168 90 / 0%));
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--pf1ar-accent) 38%, transparent), transparent);
 }
 
 .pf1ar-dark .pf1ar-spells .notification-box > h5 {
   /* footnote pill keeps a filled header — use a muted warm fill, dark text */
-  color: #20242b;
+  color: var(--pf1ar-surface);
   background: var(--pf1ar-gold);
 }
 
@@ -4479,4 +4548,180 @@
 /* Theme toggle reads as "active/dark" */
 .pf1ar-dark .pf1ar-theme-toggle {
   color: var(--pf1ar-gold);
+}
+
+/* ==========================================================================
+   THEME VARIANTS
+   Player-selectable palettes (setting "theme"), toggled as a class on the
+   sheet root alongside the pre-existing .pf1ar-dark toggle:
+       .pf1ar-theme-hybrid   — neutral, ApplicationV2-like chrome
+       .pf1ar-theme-slate    — cool neutral grays, bronze accent
+   Parchment is the default look and needs no class override — it's already
+   the base token set above (and its .pf1ar-dark variant).
+   ========================================================================== */
+
+.pf1ar-sheet.pf1ar-theme-hybrid {
+  --pf1ar-surface: #fbfaf7;
+  --pf1ar-surface-raised: #ffffff;
+  --pf1ar-surface-muted: #f1eee7;
+  --pf1ar-surface-deep: #f7f5ef;
+  --pf1ar-line: #e5e1d7;
+  --pf1ar-line-strong: #d5cfc0;
+  --pf1ar-ink: #2b2723;
+  --pf1ar-ink-soft: #6a6355;
+  --pf1ar-ink-muted: #8f8676;
+}
+
+.pf1ar-sheet.pf1ar-theme-hybrid.pf1ar-dark {
+  --pf1ar-surface: #1b1e21;
+  --pf1ar-surface-raised: #24282c;
+  --pf1ar-surface-muted: #1d2124;
+  --pf1ar-surface-deep: #202427;
+  --pf1ar-line: #363b40;
+  --pf1ar-line-strong: #474d54;
+  --pf1ar-action: #5fb0b5;
+  --pf1ar-action-soft: rgb(95 176 181 / 14%);
+  --pf1ar-drop: #6fa8c9;
+  --pf1ar-drop-bg: rgb(111 168 201 / 15%);
+}
+
+.pf1ar-sheet.pf1ar-theme-slate {
+  --pf1ar-surface: #f6f6f4;
+  --pf1ar-surface-raised: #ffffff;
+  --pf1ar-surface-muted: #eeeeeb;
+  --pf1ar-surface-deep: #f4f4f1;
+  --pf1ar-line: #e3e3df;
+  --pf1ar-line-strong: #d3d3ce;
+  --pf1ar-ink: #24262a;
+  --pf1ar-ink-soft: #5b5f66;
+  --pf1ar-ink-muted: #8a8e95;
+  --pf1ar-accent: #8a3a34;
+  --pf1ar-accent-deep: #6d2c27;
+  --pf1ar-gold: #9a7b3f;
+  --pf1ar-gold-light: #c2a668;
+  --pf1ar-action: #35707a;
+  --pf1ar-action-soft: #e3eef0;
+  --pf1ar-drop: #35707a;
+  --pf1ar-drop-bg: rgb(53 112 122 / 9%);
+}
+
+.pf1ar-sheet.pf1ar-theme-slate.pf1ar-dark {
+  --pf1ar-surface: #131518;
+  --pf1ar-surface-raised: #20242a;
+  --pf1ar-surface-muted: #191c21;
+  --pf1ar-surface-deep: #1c2025;
+  --pf1ar-line: #333941;
+  --pf1ar-line-strong: #454c55;
+  --pf1ar-ink: #e6e8ec;
+  --pf1ar-ink-soft: #a8adb5;
+  --pf1ar-ink-muted: #7d828b;
+  --pf1ar-accent: #d69b6a;
+  --pf1ar-accent-deep: #b6804f;
+  --pf1ar-gold: #c89a5e;
+  --pf1ar-gold-light: #e0be86;
+  --pf1ar-action: #63b3ba;
+  --pf1ar-action-soft: rgb(99 179 186 / 14%);
+  --pf1ar-drop: #63b3ba;
+  --pf1ar-drop-bg: rgb(99 179 186 / 14%);
+}
+
+/* ==========================================================================
+   ACCESSIBILITY & NUMERIC ALIGNMENT
+   ========================================================================== */
+
+/* Tabular figures so digit columns (HP, AC, skill mods, gp) stop "jumping". */
+.pf1ar-root {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.pf1ar-root :is(a, button, [tabindex], .item-control):focus-visible {
+  outline: 2px solid var(--pf1ar-action);
+  outline-offset: 2px;
+  border-radius: var(--pf1ar-radius-sm);
+}
+
+/* ==========================================================================
+   COMPACT MODE
+   Setting "compact" toggles .pf1ar-compact on the sheet root for players who
+   want a denser inventory/container layout.
+   ========================================================================== */
+
+.pf1ar-sheet.pf1ar-compact .pf1ar-inventory-list > .item {
+  grid-auto-rows: minmax(26px, auto);
+}
+
+.pf1ar-sheet.pf1ar-compact .item-detail,
+.pf1ar-sheet.pf1ar-compact .item-name {
+  padding-block: 2px;
+}
+
+.pf1ar-sheet.pf1ar-compact .pf1ar-contained-row {
+  min-height: 24px;
+}
+
+.pf1ar-sheet.pf1ar-compact .pf1ar-contained-name,
+.pf1ar-sheet.pf1ar-compact .pf1ar-contained-detail {
+  padding-block: 1px;
+}
+
+.pf1ar-sheet.pf1ar-compact .pf1ar-panel-title {
+  margin-block: 6px;
+}
+
+/* ==========================================================================
+   CONTAINER POLISH — empty state & drag grip
+   ========================================================================== */
+
+.pf1ar-container-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin: 10px;
+  padding: 20px;
+  border: 1.5px dashed var(--pf1ar-line);
+  border-radius: var(--pf1ar-radius);
+  background: var(--pf1ar-surface-raised);
+  color: var(--pf1ar-ink-muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.pf1ar-container-empty i {
+  font-size: 22px;
+  opacity: 0.55;
+}
+
+.pf1ar-contained-grip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--pf1ar-line-strong);
+  cursor: grab;
+}
+
+.pf1ar-contained-row:hover .pf1ar-contained-grip {
+  color: var(--pf1ar-gold);
+}
+
+.pf1ar-skill-unranked {
+  opacity: 0.7;
+}
+
+/* ==========================================================================
+   INTEROP — Koboldworks Item Hints (mkah-pf1-item-hints)
+   O módulo injeta chips de aviso (.item-hints.koboldworks) com texto quase
+   preto (#1a1918), pensado para ficha clara. No modo escuro esse texto some no
+   fundo — devolvemos uma tinta clara. Os poucos chips que trazem fundo claro
+   OPACO próprio (value, pointcost) mantêm o texto escuro para não sumir neles.
+   O módulo documenta (INTEROP.md) que a estilização fina é feita via CSS do
+   consumidor, então este override é o caminho previsto.
+   ========================================================================== */
+.pf1ar-dark .item-hints.koboldworks .item-hint {
+  color: var(--pf1ar-ink);
+}
+
+.pf1ar-dark .item-hints.koboldworks .item-hint:is(.value, .pointcost):not(.iconized) {
+  color: #1a1918;
 }

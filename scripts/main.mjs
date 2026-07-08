@@ -1,15 +1,28 @@
 /**
- * PF1E Alt Sheet Reworked — Módulo principal.
+ * @file PF1E Alt Sheet Reworked — ponto de entrada do módulo.
  *
  * Segue o mesmo padrão do pf1-alt-sheet original:
- * - Helpers e templates carregados no hook "init"
- * - Sheets registradas no hook "ready" com DocumentSheetConfig global
+ * - Helpers Handlebars, settings e templates carregados no hook `init`;
+ * - Sheets registradas no hook `ready` via `DocumentSheetConfig` — no `init`
+ *   as classes do PF1E (`pf1.applications.actor.*`) ainda não existem.
  */
 
 import { registerHandlebarsHelpers } from "./helpers.mjs";
 import { AltCharacterSheetPF, AltNPCSheetPF } from "./sheet.mjs";
 
 const MODULE_ID = "pf1-altsheet-reworked";
+
+/**
+ * Re-renderiza todas as Alt Sheets abertas para que uma mudança de setting
+ * client-scoped (tema, densidade compacta, filtro de perícias) apareça na
+ * hora, sem o jogador precisar fechar e reabrir a ficha (padrão App V1).
+ * @returns {void}
+ */
+function _rerenderOpenAltSheets() {
+  for (const app of Object.values(ui.windows)) {
+    if (app?.element?.[0]?.classList?.contains("pf1ar-sheet")) app.render(false);
+  }
+}
 
 // ─── INIT: helpers e pré-carregamento de templates ───────────────────────────
 
@@ -21,13 +34,57 @@ Hooks.once("init", () => {
 
   registerHandlebarsHelpers();
 
-  // Per-user dark mode preference (toggled from the sheet header button).
+  // Modo escuro por usuário (alternado pelo botão no cabeçalho da ficha;
+  // config: false porque a UI dele é o próprio botão, não o menu de settings).
   game.settings.register(MODULE_ID, "darkMode", {
     name: "PF1AR.Settings.DarkMode",
     scope: "client",
     config: false,
     type: Boolean,
     default: false,
+  });
+
+  // Paleta visual selecionável pelo jogador. Combina com o darkMode.
+  game.settings.register(MODULE_ID, "theme", {
+    name: "PF1AR.Settings.Theme",
+    hint: "PF1AR.Settings.ThemeHint",
+    scope: "client",
+    config: true,
+    type: String,
+    default: "parchment",
+    choices: {
+      parchment: "PF1AR.Theme.Parchment",
+      hybrid: "PF1AR.Theme.Hybrid",
+      slate: "PF1AR.Theme.Slate",
+    },
+    onChange: _rerenderOpenAltSheets,
+  });
+
+  // Layout mais denso de inventário/contêiner para quem preferir.
+  game.settings.register(MODULE_ID, "compact", {
+    name: "PF1AR.Settings.Compact",
+    hint: "PF1AR.Settings.CompactHint",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: false,
+    onChange: _rerenderOpenAltSheets,
+  });
+
+  // Quais perícias a lista rápida da aba Summary mostra.
+  game.settings.register(MODULE_ID, "summarySkills", {
+    name: "PF1AR.Settings.SummarySkills",
+    hint: "PF1AR.Settings.SummarySkillsHint",
+    scope: "client",
+    config: true,
+    type: String,
+    default: "ranked",
+    choices: {
+      ranked: "PF1AR.Labels.Ranked",
+      class: "PF1AR.Labels.SkillsClass",
+      all: "PF1AR.Labels.SkillsAll",
+    },
+    onChange: _rerenderOpenAltSheets,
   });
 
   loadTemplates([
@@ -47,7 +104,7 @@ Hooks.once("init", () => {
     `modules/${MODULE_ID}/templates/parts/settings.hbs`,
   ]);
 
-  console.log(`${MODULE_ID} | init OK`);
+  console.info(`${MODULE_ID} | init OK`);
 });
 
 // ─── READY: registro das sheets ───────────────────────────────────────────────
@@ -69,5 +126,5 @@ Hooks.once("ready", () => {
 
   DocumentSheetConfig.updateDefaultSheets();
 
-  console.log(`${MODULE_ID} | sheets registradas`);
+  console.info(`${MODULE_ID} | sheets registradas`);
 });

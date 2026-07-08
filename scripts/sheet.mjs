@@ -1,30 +1,53 @@
 /**
- * PF1E Alt Sheet Reworked — Classes de Sheet.
+ * @file PF1E Alt Sheet Reworked — classes de sheet.
  *
- * Estende as sheets FormApplication do PF1E (ActorSheetPFCharacter / ActorSheetPFNPC),
- * substituindo o template e aplicando o estilo moderno do módulo.
- * Toda a lógica de dados (getData, _onX, listeners) é herdada do sistema PF1E.
+ * Estende as sheets Application V1 do PF1E (ActorSheetPFCharacter /
+ * ActorSheetPFNPC), substituindo o template e aplicando o estilo moderno do
+ * módulo. Toda a lógica de dados (getData, _onX, listeners) é herdada do
+ * sistema PF1E; aqui só entram o painel inline de contêineres, o binding dos
+ * nossos data-action de rolagem e a aplicação de tema/densidade.
  */
 
 const MODULE_ID = "pf1-altsheet-reworked";
 const M = `modules/${MODULE_ID}`;
 
-// ─── CONTAINER CONTENTS ──────────────────────────────────────────────────────
-// PF1E stores items inside a container on the container item itself
-// (`container.system.items`, prepared as `container.items`). Those contained
-// items are not direct Actor embedded items, so the actor-sheet controls cannot
-// operate on them directly. We prepare a compact, read/write render model here
-// and bind dedicated controls below.
+// ─── CONTEÚDO DE CONTÊINERES ─────────────────────────────────────────────────
+// O PF1E guarda os itens de um contêiner no próprio item contêiner
+// (`container.system.items`, preparado como `container.items`). Esses itens
+// NÃO são embedded items diretos do Actor, então os controles padrão da sheet
+// não os alcançam — por isso preparamos aqui um render model próprio
+// (leitura/escrita) e fazemos o binding de controles dedicados logo abaixo.
 
+/**
+ * Formata um valor em moedas separadas (po/pp/pc…) usando o formatador de
+ * moeda do próprio sistema PF1E.
+ * @param {number} value - Valor na menor denominação (peças de cobre).
+ * @returns {string} Rótulo localizado, ex.: "12 po, 5 pc".
+ */
 function _formatCurrencySplit(value) {
   return game.i18n.format("PF1.SplitValue", pf1.utils.currency.split(value, { pad: true }));
 }
 
+/**
+ * Obtém (criando sob demanda) o conjunto de contêineres com o painel inline
+ * aberto nesta sheet. Vive na instância da sheet para sobreviver a re-renders
+ * (o Application V1 recria o DOM inteiro a cada render).
+ * @param {ActorSheetPFCharacter|ActorSheetPFNPC} sheet - A sheet dona do estado.
+ * @returns {Set<string>} Ids dos itens contêiner atualmente abertos.
+ */
 function _getOpenInlineContainers(sheet) {
   sheet._pf1arOpenContainers ??= new Set();
   return sheet._pf1arOpenContainers;
 }
 
+/**
+ * Marca um contêiner como aberto/fechado no estado da sheet, para que o
+ * `<details>` re-renderize no mesmo estado em que o jogador o deixou.
+ * @param {ActorSheetPFCharacter|ActorSheetPFNPC} sheet - A sheet dona do estado.
+ * @param {string|undefined} containerId - Id do item contêiner (ignorado se vazio).
+ * @param {boolean} [open] - true para abrir, false para fechar.
+ * @returns {void}
+ */
 function _setInlineContainerOpen(sheet, containerId, open = true) {
   if (!containerId) return;
   const openContainers = _getOpenInlineContainers(sheet);
@@ -32,8 +55,18 @@ function _setInlineContainerOpen(sheet, containerId, open = true) {
   else openContainers.delete(containerId);
 }
 
+/**
+ * Monta o render model do painel inline de conteúdo de um item contêiner.
+ * Sempre retorna objeto para itens do tipo contêiner — inclusive vazios
+ * (`count: 0`, `sections: []`) — para que o template renderize o `<details>`
+ * com o dropzone convidativo de estado vazio em vez de sumir com ele.
+ * @param {ActorSheetPFCharacter|ActorSheetPFNPC} sheet - A sheet dona do ator.
+ * @param {Item|undefined} container - O documento do item contêiner.
+ * @param {object} context - Contexto do getData usado para preparar as seções.
+ * @returns {object|null} O render model do conteúdo, ou null se `container` não for contêiner.
+ */
 function _prepareContainerContents(sheet, container, context) {
-  if (container?.type !== "container" || !container.items?.size) return null;
+  if (container?.type !== "container") return null;
 
   const inventory = Object.values(pf1.config.sheetSections.inventory)
     .map((data) => foundry.utils.deepClone(data))
@@ -43,7 +76,7 @@ function _prepareContainerContents(sheet, container, context) {
     sheet._prepareSection(section);
   }
 
-  const items = container.items
+  const items = (container.items ?? [])
     .map((item) => sheet._prepareItem(item))
     .sort((a, b) => (a.sort || 0) - (b.sort || 0));
 
@@ -56,8 +89,9 @@ function _prepareContainerContents(sheet, container, context) {
     section.items.push(item);
   }
 
+  // Contêineres sem itens ainda renderizam o <details> (com o dropzone de
+  // estado vazio) em vez de desaparecer da lista.
   const sections = inventory.filter((section) => section.items?.length);
-  if (!sections.length) return null;
 
   const currency = container.system.currency ?? {};
   const coinage = pf1.utils.currency.merge(currency);
@@ -82,6 +116,14 @@ function _prepareContainerContents(sheet, container, context) {
   };
 }
 
+/**
+ * Anota cada item contêiner do inventário preparado pelo getData do sistema
+ * com `pf1arIsContainer` e o render model `pf1arContents` (ver
+ * {@link _prepareContainerContents}), consumidos pelo `inventory.hbs`.
+ * @param {ActorSheetPFCharacter|ActorSheetPFNPC} sheet - A sheet dona do ator.
+ * @param {object} data - Contexto retornado pelo getData do sistema (mutado in-place).
+ * @returns {void}
+ */
 function _prepareInventoryContainers(sheet, data) {
   if (!Array.isArray(data.inventory)) return;
 
@@ -100,7 +142,80 @@ function _prepareInventoryContainers(sheet, data) {
   }
 }
 
+// ─── FILHOS DE LINK NA ABA FEATURES ──────────────────────────────────────────
+// No PF1E, `system.links.children` são referências entre itens que existem
+// normalmente no ator (ex.: uma Discovery de Alquimista que agrupa outras
+// discoveries). A ficha do sistema os mostra soltos; aqui nós os aninhamos
+// visualmente sob o item-pai. Como são itens embedded reais (diferente do
+// conteúdo de contêiner), os listeners do sistema já operam neles pelo
+// `data-item-id` — só reordenamos a lista e marcamos a profundidade.
+
+/**
+ * Aninha os feats-filho (`links.children`) logo abaixo do feat-pai na aba
+ * Features, marcando cada linha com `pf1arLinkDepth`/`pf1arIsLinkChild` para o
+ * template indentar. Achata a árvore em ordem de exibição (pai, depois
+ * descendentes) com guarda anti-ciclo; filhos cujo pai não está na lista de
+ * feats permanecem no lugar. Muta `data.features` in-place.
+ * @param {ActorSheetPFCharacter|ActorSheetPFNPC} sheet - A sheet dona do ator.
+ * @param {object} data - Contexto do getData do sistema.
+ * @returns {void}
+ */
+function _prepareLinkedFeatChildren(sheet, data) {
+  const sections = Array.isArray(data.features) ? data.features : Object.values(data.features ?? {});
+  if (!sections.length) return;
+
+  // Índice global id → entrada preparada (os filhos podem estar em outra seção).
+  const entryById = new Map();
+  for (const section of sections) {
+    for (const entry of section.items ?? []) entryById.set(entry.id, entry);
+  }
+
+  // childId → parentId e parentId → [childIds], só quando ambos são feats listados.
+  const parentOf = new Map();
+  const childIdsOf = new Map();
+  for (const entry of entryById.values()) {
+    const doc = sheet.actor.items.get(entry.id);
+    const kids = (doc?.getLinkedItemsSync?.("children") ?? []).filter((c) => entryById.has(c.id));
+    if (!kids.length) continue;
+    childIdsOf.set(
+      entry.id,
+      kids.map((c) => c.id),
+    );
+    for (const c of kids) if (!parentOf.has(c.id)) parentOf.set(c.id, entry.id);
+  }
+  if (!parentOf.size) return;
+
+  // Reconstrói cada seção: só os itens de topo iniciam a emissão; os
+  // descendentes entram logo após o pai, recursivamente (Set anti-ciclo).
+  for (const section of sections) {
+    const out = [];
+    const emit = (entry, depth, seen) => {
+      entry.pf1arLinkDepth = depth;
+      entry.pf1arIsLinkChild = depth > 0;
+      out.push(entry);
+      for (const childId of childIdsOf.get(entry.id) ?? []) {
+        if (seen.has(childId)) continue;
+        const child = entryById.get(childId);
+        if (child) emit(child, depth + 1, new Set(seen).add(childId));
+      }
+    };
+    for (const entry of section.items ?? []) {
+      if (parentOf.has(entry.id)) continue; // filho: emitido pela recursão do pai
+      emit(entry, 0, new Set([entry.id]));
+    }
+    section.items = out;
+  }
+}
+
+/**
+ * Resolve, a partir de um elemento clicado, a linha do item contido e os
+ * documentos (contêiner + item) correspondentes.
+ * @param {ActorSheetPFCharacter|ActorSheetPFNPC} sheet - A sheet dona do ator.
+ * @param {HTMLElement} element - Elemento de origem do evento.
+ * @returns {{row?: HTMLElement, container?: Item, item?: Item}} Contexto resolvido (vazio se não achar a linha).
+ */
 function _getContainedItemContext(sheet, element) {
+  /** @type {HTMLElement|null} */
   const row = element.closest("[data-container-id][data-contained-item-id]");
   if (!row) return {};
 
@@ -109,22 +224,49 @@ function _getContainedItemContext(sheet, element) {
   return { row, container, item };
 }
 
+/**
+ * Mantém o contêiner-pai aberto após uma ação num item contido — a ação
+ * dispara update do documento e re-render, que fecharia o `<details>`.
+ * @param {ActorSheetPFCharacter|ActorSheetPFNPC} sheet - A sheet dona do estado.
+ * @param {HTMLElement} element - Elemento de origem do evento.
+ * @returns {void}
+ */
 function _rememberContainedContainerOpen(sheet, element) {
+  /** @type {HTMLElement|null} */
   const row = element.closest("[data-container-id]");
   _setInlineContainerOpen(sheet, row?.dataset.containerId, true);
 }
 
+/**
+ * Encontra o alvo de drop mais próximo (linha do contêiner ou painel de
+ * conteúdo) subindo a partir do elemento sob o cursor.
+ * @param {HTMLElement} element - Elemento sob o cursor durante o drop.
+ * @returns {HTMLElement|null} O alvo de drop, ou null fora de um contêiner.
+ */
 function _getInlineContainerDropTarget(element) {
   return element.closest("[data-container-drop-id], .pf1ar-container-contents");
 }
 
+/**
+ * Extrai o id do item contêiner associado ao alvo de drop sob o cursor.
+ * @param {HTMLElement} element - Elemento sob o cursor durante o drop.
+ * @returns {string|undefined} Id do contêiner, ou undefined fora de um contêiner.
+ */
 function _getInlineContainerDropId(element) {
   const target = _getInlineContainerDropTarget(element);
   return target?.dataset.containerDropId || target?.dataset.containerId;
 }
 
+/**
+ * dragstart de uma linha de item contido: monta o dragData no formato "Item"
+ * do Foundry acrescido de `containerId`/`itemId`, para que o destino saiba
+ * remover o item do contêiner de origem ao concluir a movimentação.
+ * @param {ActorSheetPFCharacter|ActorSheetPFNPC} sheet - A sheet dona do ator.
+ * @param {DragEvent} event - O evento de dragstart.
+ * @returns {void}
+ */
 function _onContainedItemDragStart(sheet, event) {
-  const { container, item } = _getContainedItemContext(sheet, event.currentTarget);
+  const { container, item } = _getContainedItemContext(sheet, /** @type {HTMLElement} */ (event.currentTarget));
   if (!container || !item) return;
 
   event.stopPropagation();
@@ -144,13 +286,22 @@ function _onContainedItemDragStart(sheet, event) {
   event.dataTransfer.effectAllowed = "move";
 }
 
+/**
+ * Trata o drop de um item sobre um contêiner inline: valida (só itens
+ * físicos, sem contêiner dentro de si mesmo), oferece a conversão de magia em
+ * consumível (fluxo padrão do PF1E), cria o conteúdo no contêiner de destino
+ * e remove o item da origem quando a movimentação é dentro do mesmo ator.
+ * @param {ActorSheetPFCharacter|ActorSheetPFNPC} sheet - A sheet que recebeu o drop.
+ * @param {DragEvent} event - O evento de drop.
+ * @returns {Promise<Item[]|boolean|void>} Itens criados, false quando o prompt de magia é cancelado, ou void quando o drop é ignorado.
+ */
 async function _dropItemIntoInlineContainer(sheet, event) {
   event.preventDefault();
   event.stopPropagation();
 
   if (!sheet.isEditable || !sheet.actor?.isOwner) return;
 
-  const containerId = _getInlineContainerDropId(event.target);
+  const containerId = _getInlineContainerDropId(/** @type {HTMLElement} */ (event.target));
   const container = sheet.actor.items.get(containerId);
   if (!container || container.type !== "container") return;
 
@@ -211,6 +362,17 @@ async function _dropItemIntoInlineContainer(sheet, event) {
   return created;
 }
 
+/**
+ * Faz o binding de todos os listeners do painel inline de contêineres:
+ * persistência do `<details>` aberto, feedback visual de drag-over, drop,
+ * dragstart das linhas filhas e os controles `data-action="pf1arContained*"`
+ * (card, usar, editar, quantidade, identificar, duplicar, retirar, excluir,
+ * usos). Espelha os comportamentos equivalentes da sheet do sistema PF1E,
+ * que não alcançam itens contidos (não são embedded items do Actor).
+ * @param {ActorSheetPFCharacter|ActorSheetPFNPC} sheet - A sheet dona do ator.
+ * @param {JQuery} html - Raiz renderizada da sheet, como recebida em activateListeners.
+ * @returns {void}
+ */
 function _bindContainerContents(sheet, html) {
   const root = html[0];
   if (!root) return;
@@ -318,7 +480,7 @@ function _bindContainerContents(sheet, html) {
     if (item.isPhysical && !item.system.identified) {
       itemData.system.unidentified ??= {};
       itemData.system.unidentified.name = `${item.system.unidentified?.name ?? item.name} (${game.i18n.localize(
-        "PF1.Copy"
+        "PF1.Copy",
       )})`;
     }
 
@@ -381,53 +543,63 @@ function _bindContainerContents(sheet, html) {
   });
 }
 
-// ─── ROLL ACTION BINDER ───────────────────────────────────────────────────────
-// The parent sheet (ActorSheetPFCharacter/NPC) listens on specific CSS selectors
-// (.ability-name, .attribute.initiative .rollable, etc.) that don't match our
-// custom class names. We wire our data-action attributes here instead.
+// ─── BINDING DAS ROLAGENS ─────────────────────────────────────────────────────
+// A sheet-pai (ActorSheetPFCharacter/NPC) escuta seletores CSS específicos
+// (.ability-name, .attribute.initiative .rollable etc.) que não batem com as
+// nossas classes. Em vez disso, ligamos nossos atributos data-action="rollX"
+// diretamente aos métodos de rolagem do Actor do PF1E.
 
+/**
+ * Liga os `data-action` de rolagem dos templates aos métodos do Actor PF1E:
+ * rollAbility→rollAbilityTest, rollSave→rollSavingThrow, rollInit→
+ * rollInitiative, rollBAB, rollCMB/rollGenericAttack→rollAttack e rollSkill.
+ * Sem binding quando a sheet não é editável (mesma regra da sheet do sistema).
+ * @param {ActorSheetPFCharacter|ActorSheetPFNPC} sheet - A sheet dona do ator.
+ * @param {JQuery} html - Raiz renderizada da sheet, como recebida em activateListeners.
+ * @returns {void}
+ */
 function _bindRollActions(sheet, html) {
   if (!sheet.isEditable) return;
 
   const actor = sheet.actor;
   const token = sheet.token;
 
-  html.find('[data-action="rollAbility"]').on("click", e => {
+  html.find('[data-action="rollAbility"]').on("click", (e) => {
     e.preventDefault();
     const ability = e.currentTarget.dataset.ability;
     actor.rollAbilityTest(ability, { token });
   });
 
-  html.find('[data-action="rollSave"]').on("click", e => {
+  html.find('[data-action="rollSave"]').on("click", (e) => {
     e.preventDefault();
     const save = e.currentTarget.dataset.savingthrow;
     actor.rollSavingThrow(save, { token });
   });
 
-  html.find('[data-action="rollInit"]').on("click", e => {
+  html.find('[data-action="rollInit"]').on("click", (e) => {
     e.preventDefault();
     actor.rollInitiative({ createCombatants: true, rerollInitiative: game.user.isGM, token });
   });
 
-  html.find('[data-action="rollBAB"]').on("click", e => {
+  html.find('[data-action="rollBAB"]').on("click", (e) => {
     e.preventDefault();
     actor.rollBAB({ token });
   });
 
-  // CMB = maneuver attack (non-weapon)
-  html.find('[data-action="rollCMB"]').on("click", e => {
+  // CMB (manobra de combate) = ataque de manobra corpo a corpo, sem arma.
+  html.find('[data-action="rollCMB"]').on("click", (e) => {
     e.preventDefault();
     actor.rollAttack({ maneuver: true, ranged: false, token });
   });
 
-  // Generic melee/ranged attack from combat stats header
-  html.find('[data-action="rollGenericAttack"]').on("click", e => {
+  // Ataque genérico corpo a corpo/à distância do cabeçalho de combate.
+  html.find('[data-action="rollGenericAttack"]').on("click", (e) => {
     e.preventDefault();
     const ranged = e.currentTarget.dataset.ranged === "true";
     actor.rollAttack({ maneuver: false, ranged, token });
   });
 
-  html.find('[data-action="rollSkill"]').on("click", e => {
+  html.find('[data-action="rollSkill"]').on("click", (e) => {
     e.preventDefault();
     const skill = e.currentTarget.dataset.skill;
     const subSkill = e.currentTarget.dataset.subSkill || undefined;
@@ -435,19 +607,43 @@ function _bindRollActions(sheet, html) {
   });
 }
 
-// ─── DARK MODE ────────────────────────────────────────────────────────────────
-// A per-user (client-scoped) preference. The `pf1ar-dark` class is applied to
-// the outer application element so both .window-content and the form pick up
-// the dark variable overrides.
+// ─── TEMA / MODO ESCURO / DENSIDADE ──────────────────────────────────────────
+// Preferências por usuário (client-scoped). As classes são aplicadas no
+// elemento externo da aplicação para que tanto .window-content quanto o form
+// herdem os overrides de variáveis CSS.
 
+/** Ordem de ciclo dos temas visuais do botão de paleta do cabeçalho. */
+const PF1AR_THEMES = ["parchment", "hybrid", "slate"];
+
+/**
+ * Sincroniza as classes de tema/escuro/compacto da raiz da sheet com as
+ * settings. Chamada a cada activateListeners e, indiretamente, pelo re-render
+ * do onChange das settings — sempre reflete a preferência atual do cliente.
+ * @param {ActorSheetPFCharacter|ActorSheetPFNPC} sheet - A sheet cuja raiz recebe as classes.
+ * @returns {void}
+ */
 function _applyTheme(sheet) {
-  const dark = game.settings.get(MODULE_ID, "darkMode");
   const root = sheet.element?.[0];
-  if (root) root.classList.toggle("pf1ar-dark", !!dark);
+  if (!root) return;
+
+  root.classList.toggle("pf1ar-dark", !!game.settings.get(MODULE_ID, "darkMode"));
+
+  const theme = game.settings.get(MODULE_ID, "theme") || "parchment";
+  for (const t of PF1AR_THEMES) root.classList.toggle(`pf1ar-theme-${t}`, t === theme);
+
+  root.classList.toggle("pf1ar-compact", !!game.settings.get(MODULE_ID, "compact"));
 }
 
+/**
+ * Faz o binding do botão sol/lua do cabeçalho, que alterna o modo escuro.
+ * A classe é aplicada direto no DOM (sem re-render) para a troca ser
+ * instantânea; o ícone acompanha o novo estado.
+ * @param {ActorSheetPFCharacter|ActorSheetPFNPC} sheet - A sheet dona do botão.
+ * @param {JQuery} html - Raiz renderizada da sheet, como recebida em activateListeners.
+ * @returns {void}
+ */
 function _bindThemeToggle(sheet, html) {
-  html.find('[data-action="pf1arToggleTheme"]').on("click", async e => {
+  html.find('[data-action="pf1arToggleTheme"]').on("click", async (e) => {
     e.preventDefault();
     const next = !game.settings.get(MODULE_ID, "darkMode");
     await game.settings.set(MODULE_ID, "darkMode", next);
@@ -458,10 +654,36 @@ function _bindThemeToggle(sheet, html) {
   });
 }
 
-// ─── CHARACTER SHEET ──────────────────────────────────────────────────────────
+/**
+ * Faz o binding do botão de paleta do cabeçalho, que percorre PF1AR_THEMES a
+ * cada clique. O re-render (e a troca de classe) acontece via onChange da
+ * setting "theme" — por isso aqui só se grava a preferência.
+ * @param {ActorSheetPFCharacter|ActorSheetPFNPC} sheet - A sheet dona do botão.
+ * @param {JQuery} html - Raiz renderizada da sheet, como recebida em activateListeners.
+ * @returns {void}
+ */
+function _bindThemeCycle(sheet, html) {
+  html.find('[data-action="pf1arCycleTheme"]').on("click", async (e) => {
+    e.preventDefault();
+    const current = game.settings.get(MODULE_ID, "theme") || "parchment";
+    const next = PF1AR_THEMES[(PF1AR_THEMES.indexOf(current) + 1) % PF1AR_THEMES.length];
+    await game.settings.set(MODULE_ID, "theme", next);
+  });
+}
 
+// ─── FICHA DE PERSONAGEM ──────────────────────────────────────────────────────
+
+/**
+ * Ficha alternativa de personagem (PC). Herda toda a preparação de dados e os
+ * listeners da sheet de personagem do sistema PF1E, trocando apenas o
+ * template, as classes CSS da janela e os bindings adicionais do módulo.
+ */
 export class AltCharacterSheetPF extends pf1.applications.actor.ActorSheetPFCharacter {
-  /** @override */
+  /**
+   * Para atores com permissão "limited", devolve a limited-sheet do próprio
+   * sistema (mesmo comportamento da sheet original do PF1E).
+   * @inheritdoc
+   */
   get template() {
     if (!game.user.isGM && this.actor.limited) {
       return "systems/pf1/templates/actors/limited-sheet.hbs";
@@ -469,7 +691,13 @@ export class AltCharacterSheetPF extends pf1.applications.actor.ActorSheetPFChar
     return `${M}/templates/character-sheet.hbs`;
   }
 
-  /** @override */
+  /**
+   * Opções da Application V1: classes CSS próprias (`.pf1ar-sheet` escopa
+   * todo o CSS do módulo, longe do `.pf1` do sistema), dimensões e a config
+   * das abas (navSelector/contentSelector/initial/group) — o Foundry cuida de
+   * alternar `.active` nos `.tab` via `this._tabs`.
+   * @inheritdoc
+   */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["pf1-altsheet-reworked", "pf1ar-sheet", "sheet", "actor", "character"],
@@ -506,29 +734,48 @@ export class AltCharacterSheetPF extends pf1.applications.actor.ActorSheetPFChar
     });
   }
 
-  /** @override */
+  /**
+   * Acrescenta ao contexto do sistema o estado do modo escuro (ícone inicial
+   * do botão), o filtro de perícias do resumo e os render models dos
+   * contêineres inline.
+   * @inheritdoc
+   */
   async getData(options) {
     const data = await super.getData(options);
-    data.moduleId = MODULE_ID;
     data.pf1arDark = game.settings.get(MODULE_ID, "darkMode");
+    data.summarySkillsMode = game.settings.get(MODULE_ID, "summarySkills");
     _prepareInventoryContainers(this, data);
+    _prepareLinkedFeatChildren(this, data);
     return data;
   }
 
-  /** @override */
+  /**
+   * Além dos listeners do sistema, aplica tema/densidade e liga os bindings
+   * próprios do módulo (rolagens por data-action e contêineres inline).
+   * @inheritdoc
+   */
   activateListeners(html) {
     super.activateListeners(html);
     _applyTheme(this);
     _bindThemeToggle(this, html);
+    _bindThemeCycle(this, html);
     _bindRollActions(this, html);
     _bindContainerContents(this, html);
   }
 }
 
-// ─── NPC SHEET ────────────────────────────────────────────────────────────────
+// ─── FICHA DE NPC ─────────────────────────────────────────────────────────────
 
+/**
+ * Ficha alternativa de NPC. Mesma estrutura da {@link AltCharacterSheetPF},
+ * estendendo a sheet de NPC do sistema PF1E.
+ */
 export class AltNPCSheetPF extends pf1.applications.actor.ActorSheetPFNPC {
-  /** @override */
+  /**
+   * Para atores com permissão "limited", devolve a limited-sheet do próprio
+   * sistema (mesmo comportamento da sheet original do PF1E).
+   * @inheritdoc
+   */
   get template() {
     if (!game.user.isGM && this.actor.limited) {
       return "systems/pf1/templates/actors/limited-sheet.hbs";
@@ -536,7 +783,11 @@ export class AltNPCSheetPF extends pf1.applications.actor.ActorSheetPFNPC {
     return `${M}/templates/npc-sheet.hbs`;
   }
 
-  /** @override */
+  /**
+   * Opções da Application V1 — ver {@link AltCharacterSheetPF.defaultOptions};
+   * difere apenas nas classes CSS (`pf1ar-npc`/`npc`).
+   * @inheritdoc
+   */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["pf1-altsheet-reworked", "pf1ar-sheet", "pf1ar-npc", "sheet", "actor", "npc"],
@@ -573,20 +824,30 @@ export class AltNPCSheetPF extends pf1.applications.actor.ActorSheetPFNPC {
     });
   }
 
-  /** @override */
+  /**
+   * Acrescenta ao contexto do sistema o estado do modo escuro, o filtro de
+   * perícias do resumo e os render models dos contêineres inline.
+   * @inheritdoc
+   */
   async getData(options) {
     const data = await super.getData(options);
-    data.moduleId = MODULE_ID;
     data.pf1arDark = game.settings.get(MODULE_ID, "darkMode");
+    data.summarySkillsMode = game.settings.get(MODULE_ID, "summarySkills");
     _prepareInventoryContainers(this, data);
+    _prepareLinkedFeatChildren(this, data);
     return data;
   }
 
-  /** @override */
+  /**
+   * Além dos listeners do sistema, aplica tema/densidade e liga os bindings
+   * próprios do módulo (rolagens por data-action e contêineres inline).
+   * @inheritdoc
+   */
   activateListeners(html) {
     super.activateListeners(html);
     _applyTheme(this);
     _bindThemeToggle(this, html);
+    _bindThemeCycle(this, html);
     _bindRollActions(this, html);
     _bindContainerContents(this, html);
   }

@@ -146,10 +146,12 @@
             </span>
           </summary>
 
+          {{#if item.pf1arContents.count}}
           {{#each item.pf1arContents.sections as |childSection csid|}}
           <ol class="pf1ar-contained-list{{#unless @root.owner}} pf1ar-readonly-list{{/unless}}{{#unless @root.isGM}} pf1ar-no-gm-column{{/unless}}"
               data-list="{{childSection.id}}">
             <li class="pf1ar-contained-header">
+              <div class="pf1ar-contained-detail pf1ar-column-placeholder"></div>
               <div class="pf1ar-contained-name"><h4>{{pf1ar_localize childSection.label}}</h4></div>
               <div class="pf1ar-contained-detail{{#unless childSection.interface.actions}} pf1ar-column-placeholder{{/unless}}"><i class="icon-pf icon-gears" data-tooltip="PF1.ActionPlural"></i></div>
               <div class="pf1ar-contained-detail{{#unless childSection.interface.value}} pf1ar-column-placeholder{{/unless}}"><i class="icon-pf icon-coins" data-tooltip="PF1.Value"></i></div>
@@ -164,6 +166,9 @@
                 data-container-id="{{item.id}}"
                 data-contained-item-id="{{child.id}}"
                 draggable="true">
+              <span class="pf1ar-contained-grip" data-tooltip="PF1AR.Labels.DragHint">
+                <i class="fa-solid fa-grip-vertical" inert></i>
+              </span>
               <div class="pf1ar-contained-name">
                 <a class="pf1ar-contained-image" style='background-image: url("{{child.img}}")' data-action="pf1arContainedCard" data-tooltip="PF1.DisplayInChat"></a>
                 <span class="quantity{{#if child.isStack}} stack{{/if}}{{#if child.isEmpty}} empty{{else if (eq child.quantity 1)}} singular{{/if}}">{{child.quantity}}</span>
@@ -228,6 +233,12 @@
             {{/each}}
           </ol>
           {{/each}}
+          {{else}}
+          <div class="pf1ar-container-empty" data-container-drop-id="{{item.id}}">
+            <i class="fa-solid fa-inbox" inert></i>
+            <span>{{localize "PF1AR.Containers.Empty"}}</span>
+          </div>
+          {{/if}}
         </details>
         {{/if}}
       </li>

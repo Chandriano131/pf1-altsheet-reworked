@@ -19,7 +19,11 @@
       "ModifierAbbr": "Mod.",
       "Roll": "Rolar",
       "Actions": "Ações",
-      "ToggleTheme": "Alternar modo escuro"
+      "ToggleTheme": "Alternar modo escuro",
+      "CycleTheme": "Alternar tema",
+      "SkillsAll": "todas",
+      "SkillsClass": "de classe",
+      "DragHint": "Arraste para reordenar"
     },
     "Abbr": {
       "Damage": "DANO",
@@ -27,7 +31,21 @@
       "Drain": "DREN"
     },
     "Settings": {
-      "DarkMode": "Modo escuro"
+      "DarkMode": "Modo escuro",
+      "Theme": "Tema da ficha",
+      "ThemeHint": "Paleta visual da ficha alternativa. Combina com o modo escuro.",
+      "Compact": "Modo compacto",
+      "CompactHint": "Linhas de inventário e contêiner mais densas para usuários avançados.",
+      "SummarySkills": "Lista de perícias do resumo",
+      "SummarySkillsHint": "Quais perícias aparecem na lista rápida da aba Resumo."
+    },
+    "Theme": {
+      "Parchment": "Pergaminho Refinado",
+      "Hybrid": "Híbrido (aspecto nativo)",
+      "Slate": "Ardósia Neutra"
+    },
+    "Containers": {
+      "Empty": "Arraste itens aqui"
     }
   }
 }

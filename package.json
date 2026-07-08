@@ -1,0 +1,28 @@
+{
+  "name": "pf1-altsheet-reworked",
+  "version": "0.2.2",
+  "description": "Ficha alternativa moderna para o sistema Pathfinder 1e no Foundry VTT v13.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"scripts/**/*.mjs\" \"*.{js,json}\" \"types/**/*.d.ts\"",
+    "format:check": "prettier --check \"scripts/**/*.mjs\" \"*.{js,json}\" \"types/**/*.d.ts\"",
+    "typecheck": "tsc -p jsconfig.json"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^10.0.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsdoc": "^50.0.0",
+    "globals": "^16.0.0",
+    "prettier": "^3.0.0",
+    "puppeteer-core": "^25.3.0",
+    "typescript": "^5.0.0"
+  },
+  "prettier": {
+    "printWidth": 120
+  }
+}

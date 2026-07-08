@@ -1,8 +1,12 @@
 _pf1eSystem/
 _baseModule/
 _design/
+module-integration/
 node_modules/
+dist/
 *.zip
 CLAUDE.md
 AGENTS.md
+context.md
 .claude/
+docs/context.md

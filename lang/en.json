@@ -19,7 +19,11 @@
       "ModifierAbbr": "Mod.",
       "Roll": "Roll",
       "Actions": "Actions",
-      "ToggleTheme": "Toggle dark mode"
+      "ToggleTheme": "Toggle dark mode",
+      "CycleTheme": "Cycle theme",
+      "SkillsAll": "all",
+      "SkillsClass": "class",
+      "DragHint": "Drag to reorder"
     },
     "Abbr": {
       "Damage": "DMG",
@@ -27,7 +31,21 @@
       "Drain": "DRN"
     },
     "Settings": {
-      "DarkMode": "Dark mode"
+      "DarkMode": "Dark mode",
+      "Theme": "Sheet theme",
+      "ThemeHint": "Visual palette for the alternative sheet. Combines with dark mode.",
+      "Compact": "Compact mode",
+      "CompactHint": "Denser inventory and container rows for advanced users.",
+      "SummarySkills": "Summary skill list",
+      "SummarySkillsHint": "Which skills appear in the Summary tab's quick skill list."
+    },
+    "Theme": {
+      "Parchment": "Refined Parchment",
+      "Hybrid": "Hybrid (native-like)",
+      "Slate": "Neutral Slate"
+    },
+    "Containers": {
+      "Empty": "Drag items here"
     }
   }
 }

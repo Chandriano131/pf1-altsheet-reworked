@@ -181,13 +181,19 @@
 
   {{!-- ══════════════════════════════════════ COLUNA DIREITA: Perícias ══ --}}
   <div class="pf1ar-skills-panel">
-    <h3 class="pf1ar-panel-title"><i class="fa-solid fa-list-check" inert></i><span>{{localize "PF1.Skills"}}</span><small>{{localize "PF1AR.Labels.Ranked"}}</small></h3>
+    <h3 class="pf1ar-panel-title"><i class="fa-solid fa-list-check" inert></i><span>{{localize "PF1.Skills"}}</span>
+      <small>
+        {{#if (eq summarySkillsMode "all")}}{{localize "PF1AR.Labels.SkillsAll"}}
+        {{else if (eq summarySkillsMode "class")}}{{localize "PF1AR.Labels.SkillsClass"}}
+        {{else}}{{localize "PF1AR.Labels.Ranked"}}{{/if}}
+      </small>
+    </h3>
     <ul class="pf1ar-skills-list">
       {{#each skillsets.adventure.skills as |skill id|}}
         {{#if skill.arbitrary}}
           {{#each skill.subSkills as |sub subId|}}
-            {{#if sub.rank}}
-              <li class="pf1ar-skill pf1ar-sub-skill"
+            {{#if (or (eq @root.summarySkillsMode "all") sub.rank (and (eq @root.summarySkillsMode "class") skill.cs))}}
+              <li class="pf1ar-skill pf1ar-sub-skill{{#unless sub.rank}} pf1ar-skill-unranked{{/unless}}"
                   data-skill="{{id}}" data-sub-skill="{{subId}}"
                   data-action="rollSkill">
                 <span class="pf1ar-skill-name">{{skill.label}} ({{sub.name}})</span>
@@ -197,8 +203,8 @@
               </li>
             {{/if}}
           {{/each}}
-        {{else if skill.rank}}
-          <li class="pf1ar-skill" data-skill="{{id}}" data-action="rollSkill">
+        {{else if (or (eq @root.summarySkillsMode "all") skill.rank (and (eq @root.summarySkillsMode "class") skill.cs))}}
+          <li class="pf1ar-skill{{#unless skill.rank}} pf1ar-skill-unranked{{/unless}}" data-skill="{{id}}" data-action="rollSkill">
             <span class="pf1ar-skill-name">
               {{#if skill.custom}}{{skill.name}}{{else}}{{skill.label}}{{/if}}
               {{#if skill.cs}}<abbr class="pf1ar-skill-flag" title="{{localize "PF1.CSTooltip"}}">*</abbr>{{/if}}
@@ -211,8 +217,8 @@
       {{/each}}
       {{#if useBGSkills}}
         {{#each skillsets.background.skills as |skill id|}}
-          {{#if skill.rank}}
-            <li class="pf1ar-skill pf1ar-bg-skill" data-skill="{{id}}" data-action="rollSkill">
+          {{#if (or (eq @root.summarySkillsMode "all") skill.rank (and (eq @root.summarySkillsMode "class") skill.cs))}}
+            <li class="pf1ar-skill pf1ar-bg-skill{{#unless skill.rank}} pf1ar-skill-unranked{{/unless}}" data-skill="{{id}}" data-action="rollSkill">
               <span class="pf1ar-skill-name">
                 {{#if skill.custom}}{{skill.name}}{{else}}{{skill.label}}{{/if}}
               </span>
@@ -251,7 +257,10 @@
     </h3>
 
     {{#each classes as |section|}}
-      <div class="pf1ar-class-group">
+      {{!-- .item-list (no ancestral, não no pai direto) faz o Koboldworks Item
+            Hints achar os cards via ".item-list .item" sem ativar as regras
+            ".item-list > .item" de linha de inventário (que usam filho direto). --}}
+      <div class="pf1ar-class-group item-list">
         <header class="pf1ar-class-group-header">
           <span>{{pf1ar_localize section.label}}</span>
           {{#if @root.owner}}

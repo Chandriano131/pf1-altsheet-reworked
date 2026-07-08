@@ -33,7 +33,9 @@
         </li>
 
         {{#each section.items as |item iid|}}
-        <li class="item flexrow pf1ar-item-row{{#if item.disabled}} disabled{{/if}}" data-item-id="{{item.id}}">
+        <li class="item flexrow pf1ar-item-row{{#if item.disabled}} disabled{{/if}}{{#if item.pf1arIsLinkChild}} pf1ar-link-child{{/if}}"
+            {{#if item.pf1arLinkDepth}}style="--pf1ar-link-depth: {{item.pf1arLinkDepth}}"{{/if}}
+            data-item-id="{{item.id}}">
           <div class="item-name rollable">
             <div class="item-image" style='background-image: url("{{item.img}}")' data-tooltip="PF1.DisplayInChat"></div>
             <h4>{{item.name}}</h4>

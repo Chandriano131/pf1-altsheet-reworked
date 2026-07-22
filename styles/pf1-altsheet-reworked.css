@@ -2016,6 +2016,19 @@
 .pf1ar-root .item-detail.item-slot { flex-basis: 66px; }
 .pf1ar-root .item-detail.item-subtype { flex-basis: 96px; }
 .pf1ar-root .item-detail.spell-uses { flex-basis: 110px; }
+/* Colunas da lista de magias (flexbox): o cabeçalho traz ícones e as linhas
+   trazem texto ("Standard" / "V S" / "Conjuration"); sem largura fixa cada
+   célula dimensiona pelo conteúdo e as colunas desalinham. Largura igual em
+   header e linha (espelha o sistema PF1E) alinha as duas. */
+.pf1ar-root .item-detail.spell-activation { flex-basis: 120px; }
+.pf1ar-root .item-detail.spell-components { flex-basis: 80px; }
+.pf1ar-root .item-detail.spell-school { flex-basis: 96px; }
+/* As linhas de magia têm 3 controles (editar/copiar/excluir ≈ 72px) e o
+   cabeçalho só 2 (criar/browse). Com o basis global de 62px, o conteúdo das
+   linhas forçava a coluna a ~72px (não encolhe abaixo do min-content),
+   deslocando todas as colunas 10px em relação ao cabeçalho. Fixamos a largura
+   que cabe os 3 para header e linhas baterem. */
+.pf1ar-root .pf1ar-spells .item-controls { flex-basis: 74px; }
 
 .pf1ar-root .item-detail .text-box {
   min-width: 30px;

@@ -1,7 +1,7 @@
 {
   "id": "pf1-altsheet-reworked",
   "title": "PF1E Alt Sheet Reworked",
-  "description": "Ficha alternativa modernizada para Pathfinder 1e no Foundry VTT v13. Modernização do módulo pf1-alt-sheet original.",
+  "description": "A modernized alternative character sheet for Pathfinder 1e: three selectable themes with dark mode, inline container contents and nested feature links.",
   "version": "0.2.4",
   "authors": [
     {

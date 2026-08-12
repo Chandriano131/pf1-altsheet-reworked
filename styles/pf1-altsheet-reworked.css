@@ -157,12 +157,12 @@
 .pf1ar-header {
   position: relative;
   display: grid;
-  grid-template-columns: 92px minmax(0, 1fr) 190px;
+  grid-template-columns: 108px minmax(0, 1fr) 190px;
   align-items: center;
   gap: 18px;
   flex: 0 0 auto;
   min-height: 126px;
-  padding: 18px 22px 16px;
+  padding: 14px 22px 12px;
   border-bottom: 1px solid var(--pf1ar-line);
   background: linear-gradient(180deg, var(--pf1ar-surface-raised) 0%, color-mix(in srgb, var(--pf1ar-surface), var(--pf1ar-surface-muted)) 100%);
 }
@@ -176,8 +176,11 @@
 }
 
 .pf1ar-portrait-wrap {
-  width: 92px;
-  height: 92px;
+  /* Retrato quadrado (como o token/original). O cabeçalho do PC é compactado
+     abaixo para a altura ficar próxima do quadrado, evitando que ele boie. */
+  align-self: center;
+  width: 108px;
+  height: 108px;
   padding: 3px;
   border-radius: var(--pf1ar-radius-lg);
   background: linear-gradient(135deg, var(--pf1ar-gold), var(--pf1ar-accent));
@@ -198,7 +201,7 @@
 .pf1ar-identity {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
   min-width: 0;
 }
 
@@ -218,7 +221,7 @@
   background: transparent !important;
   box-shadow: none !important;
   font-family: var(--pf1ar-font-title) !important;
-  font-size: 32px !important;
+  font-size: 28px !important;
   font-weight: 700;
   line-height: 1;
 }
@@ -354,8 +357,10 @@
   align-items: center;
   gap: 8px;
   width: min(100%, 520px);
-  min-height: 48px;
-  padding: 5px 7px;
+  /* Altura mínima próxima do card populado, para o estado vazio (NPC sem raça)
+     não deixar o cabeçalho mais baixo que o de um ator com raça. */
+  min-height: 54px;
+  padding: 4px 7px;
   border: 1px solid var(--pf1ar-line);
   border-radius: var(--pf1ar-radius);
   background: color-mix(in srgb, var(--pf1ar-surface-raised) 68%, transparent);
@@ -407,7 +412,7 @@
 }
 
 .pf1ar-race-info .tag-list {
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .pf1ar-race-info .tag {
@@ -538,10 +543,41 @@
   background: linear-gradient(90deg, var(--pf1ar-gold), var(--pf1ar-gold-light));
 }
 
-.pf1ar-cr-panel .pf1ar-level-heading > strong {
-  display: inline-block;
+/* CR é o número-herói do NPC — grande e em acento, igual ao nível do PC
+   (herda font-size 38px de `.pf1ar-level-heading > strong`? não: .cr-input é
+   span, então explicitamos aqui). Editável ao clicar (cursor pointer). */
+.pf1ar-cr-panel .pf1ar-level-heading > .cr-input {
   min-width: 46px;
+  color: var(--pf1ar-accent);
+  font-family: var(--pf1ar-font-title);
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1;
   text-align: right;
+  cursor: pointer;
+}
+
+/* HD: stat secundário, pequeno e discreto, abaixo do CR. */
+.pf1ar-cr-hd {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 3px;
+  color: var(--pf1ar-ink-soft);
+  font-size: 12px;
+}
+
+.pf1ar-cr-hd > span {
+  color: var(--pf1ar-ink-muted);
+  font-family: var(--pf1ar-font-title);
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+}
+
+.pf1ar-cr-hd > strong {
+  color: var(--pf1ar-ink);
+  font-weight: 700;
 }
 
 .pf1ar-npc-xp {
@@ -3934,14 +3970,14 @@
 
 @container pf1ar (max-width: 920px) {
   .pf1ar-header {
-    grid-template-columns: 82px minmax(0, 1fr) 160px;
+    grid-template-columns: 92px minmax(0, 1fr) 160px;
     gap: 14px;
     padding-inline: 16px;
   }
 
   .pf1ar-portrait-wrap {
-    width: 82px;
-    height: 82px;
+    width: 92px;
+    height: 92px;
   }
 
   .pf1ar-charname {
@@ -3992,13 +4028,13 @@
 
 @container pf1ar (max-width: 720px) {
   .pf1ar-header {
-    grid-template-columns: 72px minmax(0, 1fr);
+    grid-template-columns: 82px minmax(0, 1fr);
     min-height: 112px;
   }
 
   .pf1ar-portrait-wrap {
-    width: 72px;
-    height: 72px;
+    width: 82px;
+    height: 82px;
   }
 
   .pf1ar-level-panel {
@@ -4016,7 +4052,8 @@
     justify-content: flex-start;
   }
 
-  .pf1ar-level-heading > strong {
+  .pf1ar-level-heading > strong,
+  .pf1ar-cr-panel .pf1ar-level-heading > .cr-input {
     font-size: 28px;
   }
 
@@ -4077,14 +4114,14 @@
 
 @container pf1ar (max-width: 560px) {
   .pf1ar-header {
-    grid-template-columns: 64px minmax(0, 1fr);
+    grid-template-columns: 72px minmax(0, 1fr);
     gap: 11px;
     padding: 14px 12px 12px;
   }
 
   .pf1ar-portrait-wrap {
-    width: 64px;
-    height: 64px;
+    width: 72px;
+    height: 72px;
   }
 
   .pf1ar-charname {
@@ -4235,8 +4272,10 @@
   transition: color 0.15s, transform 0.15s;
 }
 
-.pf1ar-theme-toggle { left: 8px; }
-.pf1ar-theme-cycle { left: 34px; }
+/* No topo-direito: o canto superior-esquerdo agora é do retrato (que cresce
+   com o cabeçalho), então os botões saem de cima da imagem. */
+.pf1ar-theme-cycle { right: 8px; }
+.pf1ar-theme-toggle { right: 34px; }
 
 .pf1ar-theme-toggle:hover,
 .pf1ar-theme-cycle:hover {
@@ -4737,4 +4776,99 @@
 
 .pf1ar-dark .item-hints.koboldworks .item-hint:is(.value, .pointcost):not(.iconized) {
   color: #1a1918;
+}
+
+/* ==========================================================================
+   CONTEÚDO INJETADO POR MÓDULOS DE TERCEIROS (aba Settings)
+   Módulos externos localizam a aba pelo seletor convencional do sistema
+   (`.tab.settings[data-tab="settings"]`) e ANEXAM blocos ao fim dela — ficando
+   irmãos do nosso `.pf1ar-settings-shell`. Aqui damos a esses blocos a mesma
+   aparência dos painéis nativos da ficha, sem conhecer módulo algum: vale para
+   qualquer um que siga a convenção.
+   Escopo deliberado: só a aba Settings. Injeções em outras abas continuam sem
+   tratamento, como antes.
+   ========================================================================== */
+
+.pf1ar-root section.primary-body > .tab.settings {
+  gap: 14px;
+}
+
+/* Cada bloco injetado vira um painel igual aos nossos. O `display: block`
+   cancela o grid de 2 colunas de `.tab[data-tab="settings"] .form-group`, que
+   é pensado para pares rótulo/campo e desmontaria um bloco-contêiner. */
+.pf1ar-root section.primary-body > .tab.settings > *:not(.pf1ar-settings-shell) {
+  display: block;
+  flex: 0 0 auto;
+  padding: 12px;
+  border: 1px solid var(--pf1ar-line);
+  border-radius: var(--pf1ar-radius);
+  background: var(--pf1ar-surface-raised);
+  box-shadow: var(--pf1ar-shadow-sm);
+}
+
+.pf1ar-root section.primary-body > .tab.settings > *:not(.pf1ar-settings-shell) :is(h2, h3, h4) {
+  color: var(--pf1ar-accent);
+  border: 0;
+  font-family: var(--pf1ar-font-title);
+  font-variant: small-caps;
+  font-weight: 700;
+}
+
+.pf1ar-root section.primary-body > .tab.settings > *:not(.pf1ar-settings-shell) > :is(h2, h3):first-child {
+  margin: 0 0 10px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--pf1ar-line);
+  font-size: 17px;
+}
+
+.pf1ar-root section.primary-body > .tab.settings > *:not(.pf1ar-settings-shell) h4 {
+  margin: 0 0 5px;
+  font-size: 14px;
+}
+
+/* Texto auxiliar e avisos que os módulos costumam emitir. */
+.pf1ar-root section.primary-body > .tab.settings > *:not(.pf1ar-settings-shell) p {
+  margin: 0;
+  color: var(--pf1ar-ink-soft);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.pf1ar-root section.primary-body > .tab.settings > *:not(.pf1ar-settings-shell) p.error {
+  color: var(--pf1ar-danger);
+  font-weight: 600;
+}
+
+/* Miniaturas (retratos de ator, ícones de item) trazidas pelo módulo. */
+.pf1ar-root section.primary-body > .tab.settings > *:not(.pf1ar-settings-shell) img {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  object-fit: cover;
+  border: 1px solid var(--pf1ar-line-strong);
+  border-radius: var(--pf1ar-radius-sm);
+}
+
+/* Botões de ação (abrir diálogo de configuração, etc.). */
+.pf1ar-root section.primary-body > .tab.settings > *:not(.pf1ar-settings-shell) button {
+  width: auto;
+  min-height: 28px;
+  margin-top: 10px;
+  padding: 4px 12px;
+  color: var(--pf1ar-ink);
+  border: 1px solid var(--pf1ar-line-strong);
+  border-radius: var(--pf1ar-radius-sm);
+  background: var(--pf1ar-surface-muted);
+  font-family: var(--pf1ar-font-title);
+  font-size: 13px;
+  font-variant: small-caps;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+.pf1ar-root section.primary-body > .tab.settings > *:not(.pf1ar-settings-shell) button:hover {
+  color: var(--pf1ar-accent);
+  border-color: var(--pf1ar-gold);
+  background: var(--pf1ar-surface-raised);
 }

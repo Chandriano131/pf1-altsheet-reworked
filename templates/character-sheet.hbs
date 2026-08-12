@@ -33,6 +33,16 @@
             {{#if level}}<b>{{level}}</b>{{/if}}
           </span>
         {{/each}}
+        {{!-- Alinhamento aqui (não na bio row) para padronizar com o NPC e evitar
+              que a bio quebre em 2 linhas. --}}
+        <div class="controls alignment pf1ar-alignment-control" data-tooltip="PF1.Alignment">
+          <span class="pf1ar-alignment-badge">
+            {{#if labels.alignment}}{{labels.alignment}}{{else}}{{localize "PF1.Alignment"}}{{/if}}
+          </span>
+          <a class="control alignment" data-tooltip="PF1.Alignment">
+            <i class="fa-solid fa-pen-to-square" inert></i>
+          </a>
+        </div>
       </div>
 
       <div class="pf1ar-bio-row">
@@ -61,14 +71,6 @@
           <input type="text" name="system.details.weight" value="{{system.details.weight}}"
                  placeholder="{{localize "PF1.Weight"}}">
         </label>
-        <div class="controls alignment pf1ar-alignment-control" data-tooltip="PF1.Alignment">
-          <span class="pf1ar-alignment-badge">
-            {{#if labels.alignment}}{{labels.alignment}}{{else}}{{localize "PF1.Alignment"}}{{/if}}
-          </span>
-          <a class="control alignment" data-tooltip="PF1.Alignment">
-            <i class="fa-solid fa-pen-to-square" inert></i>
-          </a>
-        </div>
       </div>
 
       <div class="pf1ar-race-selector item"
@@ -206,7 +208,11 @@
       {{editor notesHTML target="system.details.notes.value" button=true editable=editable engine="prosemirror" collaborate=false}}
     </div>
 
-    <div class="tab flexcol" data-group="primary" data-tab="settings">
+    {{!-- A classe `settings` segue a convenção do sistema (`tab <nome> flexcol`):
+          é por ela que módulos de terceiros localizam a aba para injetar
+          conteúdo (ex.: `.tab.settings[data-tab="settings"]`). Sem ela a
+          injeção falha silenciosamente. --}}
+    <div class="tab settings flexcol" data-group="primary" data-tab="settings">
       <div class="pf1ar-settings-shell">
         <h3 class="pf1ar-panel-title"><i class="fa-solid fa-gears" inert></i><span>{{localize "PF1.Settings"}}</span></h3>
         {{> "systems/pf1/templates/actors/parts/actor-settings.hbs"}}
